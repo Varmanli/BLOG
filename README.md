@@ -1,36 +1,46 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Blog Project
 
-## Getting Started
+این پروژه یک وبلاگ ساده است که با استفاده از Next.js برای فریمورک سمت کلاینت و Strapi به عنوان CMS (مدیریت محتوای سرور) ساخته شده است. این README شامل توضیحات کلی درباره پروژه و ساختار آن است.
 
-First, run the development server:
+## معرفی
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+این وبلاگ از Strapi برای مدیریت پست‌ها و Next.js برای رندر کردن صفحات استفاده می‌کند. Strapi به عنوان API بک‌اند و Next.js به عنوان فریمورک فرانت‌اند عمل می‌کند. این پروژه شامل ویژگی‌هایی از جمله رندر داینامیک محتوا و مدیریت تصاویر است.
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## ساختار پروژه
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### پوشه Strapi
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+- **`api/`**: شامل مدل‌های داده و کنترلرها برای مدیریت انواع مختلف محتوا.
+- **`config/`**: پیکربندی Strapi برای مدیریت تنظیمات و محیط توسعه.
+- **`public/`**: شامل فایل‌های عمومی مانند تصاویر و سایر دارایی‌ها.
 
-## Learn More
+### پوشه Next.js
 
-To learn more about Next.js, take a look at the following resources:
+- **`pages/`**: شامل صفحات مختلف وبسایت. این پوشه شامل فایل‌هایی است که مسیرهای مختلف وبسایت را تعریف می‌کنند.
+  - **`index.tsx`**: صفحه اصلی که لیستی از پست‌های وبلاگ را نمایش می‌دهد.
+  - **`posts/[id].tsx`**: صفحه جزئیات پست که اطلاعات کامل هر پست را نمایش می‌دهد.
+- **`components/`**: شامل کامپوننت‌های React برای ساختار و طراحی صفحات.
+- **`public/`**: شامل فایل‌های استاتیک مانند تصاویر و فونت‌ها.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## عملکرد
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+- **صفحه اصلی (Home Page)**: نمایش لیست پست‌های وبلاگ با پیش‌نمایش کوتاه از هر پست.
+- **صفحه جزئیات پست**: نمایش محتوای کامل هر پست شامل عنوان، تصاویر و پاراگراف‌ها.
+- **رندر داینامیک**: استفاده از Next.js برای رندر صفحات وبلاگ به صورت استاتیک و داینامیک.
 
-## Deploy on Vercel
+## نکات
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+- **مدیریت محتوا**: تمام پست‌های وبلاگ از طریق داشبورد Strapi مدیریت می‌شوند. کاربران می‌توانند پست‌ها را اضافه، ویرایش یا حذف کنند.
+- **تصاویر**: تصاویر به صورت داینامیک از Strapi بارگذاری می‌شوند و با استفاده از کامپوننت `Image` از Next.js بهینه می‌شوند.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+## توسعه
+
+برای توسعه ویژگی‌های جدید و بهبود پروژه، لطفاً با استفاده از Git برای مدیریت نسخه‌ها و شاخه‌های جدید، تغییرات خود را انجام دهید و درخواست‌های کشش (pull requests) را ارسال کنید.
+
+## سهم توسعه‌دهندگان
+
+ما از تمامی توسعه‌دهندگان که علاقه‌مند به کمک و بهبود پروژه هستند استقبال می‌کنیم. برای همکاری، لطفاً با تیم توسعه در تماس باشید.
+
+---
+
+این README شامل توضیحات کلی درباره پروژه و ساختار آن است و نیازی به اطلاعات فنی خاصی در مورد راه‌اندازی و نصب ندارد.

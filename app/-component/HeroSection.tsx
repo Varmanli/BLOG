@@ -1,27 +1,39 @@
 import Image from "next/image";
 import image from "@/public/imagehero.png";
+
 function HeroSection() {
   return (
-    <div className="flex flex-col justify-center items-center md:flex-row-reverse px-7 ">
-      <div className=" mx-auto md:basis-1/3">
-        <Image src={image} alt="image" />
+    <div className="flex flex-col-reverse md:flex-row-reverse justify-center items-center px-7 py-10 bg-gray-50">
+      <div className="w-full md:w-1/3 flex justify-center mb-6 md:mb-0">
+        <Image src={image} alt="یک پسر پشت کامپیوتر" />
       </div>
-      <div className="md:basis-1/2">
-        <h2 className="text-primary mb-4 text-xl font-semibold">
-          اینجا وبلاگ منه!
+      <div className="w-full md:w-2/3 flex flex-col items-start text-right md:pr-10">
+        <h2 className="text-primary mb-4 text-3xl font-extrabold leading-relaxed">
+          به دنیای برنامه‌نویسی خوش اومدی!
         </h2>
-        <p className="text-neutral/90 ">
-          اینجا جاییه که با هم وارد دنیای برنامه‌نویسی و تکنولوژی می‌شیم. <br />
-          من امیرحسین هستم و این وبلاگ رو راه انداختم تا تجربیات و دانسته‌هام رو
-          درباره موضوعات مختلف مثل برنامه‌نویسی، ابزارها، فریم‌ورک‌ها و
-          تکنولوژی‌های جدید با شما به اشتراک بذارم. هدفم اینه که نه تنها اطلاعات
-          مفیدی بهتون ارائه بدم، بلکه بهتون کمک کنم توی مسیر یادگیری‌تون راحت‌تر
-          پیش برید. از نکات کاربردی و تجربیات واقعی تا مقالات آموزشی و تحلیلی،
-          همه اینجا پیدا می‌شه. امیدوارم نوشته‌هام بهتون کمک کنه تا هم ایده‌های
-          جدیدی بگیرید و هم انگیزه‌تون برای یادگیری و پیشرفت بیشتر بشه. پس اگر
-          شما هم عاشق یادگیری و کنجکاوی توی دنیای کد هستید، جای درستی اومدید.
-          همراه من باشید تا این مسیر رو با هم بهتر و جذاب‌تر کنیم!
+        <p className="text-neutral-700 mb-6 leading-8">
+          اینجا جاییه که با هم وارد دنیای برنامه‌نویسی و تکنولوژی می‌شیم. من
+          <strong className="text-primary"> امیرحسین </strong>
+          هستم و این وبلاگ رو برای یادگیری، به‌اشتراک‌گذاری و رشد توی دنیای کدها
+          ساختم. از نکات کاربردی گرفته تا تجربیات واقعی و مقالات تحلیلی، همه
+          اینجا منتظرته! پس با من همراه شو و یادگیری رو به یه تجربه جذاب و
+          الهام‌بخش تبدیل کن.
         </p>
+
+        <div className="flex gap-4">
+          <a
+            href="/blogs"
+            className="bg-primary text-white px-5 py-2 rounded-md shadow hover:bg-primary/80 transition-all"
+          >
+            مطالعه بلاگ‌ها
+          </a>
+          <a
+            href="/popular"
+            className="bg-transparent text-primary border border-primary px-5 py-2 rounded-md hover:bg-primary hover:text-white transition-all"
+          >
+            بلاگ‌های محبوب
+          </a>
+        </div>
       </div>
     </div>
   );

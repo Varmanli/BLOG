@@ -3,7 +3,7 @@ import Image from "next/image";
 
 function Page() {
   return (
-    <div className="flex flex-col-reverse md:flex-row-reverse items-center gap-10 px-6 py-12 mx-4 md:mx-10">
+    <div className="flex flex-col-reverse md:flex-row-reverse items-center gap-10 px-6 py-12 mx-4 md:mx-10 bg-gray-50 dark:bg-gray-900 transition-all">
       {/* بخش تصویر */}
       <div className="w-full md:w-1/3 flex justify-center">
         <Image
@@ -15,16 +15,19 @@ function Page() {
 
       {/* بخش متن */}
       <div className="w-full md:w-2/3 text-right">
-        <h2 className="text-primary text-3xl font-extrabold mb-4 ">
+        <h2 className="text-primary dark:text-yellow-400 text-3xl font-extrabold mb-4">
           درباره من
         </h2>
-        <p className="text-neutral-700 text-base leading-8">
-          سلام! من <strong>امیرحسین ورمانلی</strong> هستم. توسعه‌دهنده وب و عاشق
-          یادگیری و به اشتراک‌گذاری دانش. هدف من از راه‌اندازی این وبلاگ، ارائه
-          محتوای مفید و کاربردی برای برنامه‌نویسان و علاقه‌مندان به فناوری است.
-          اینجا، از تجربیاتم در پروژه‌های مختلف و چالش‌های کاری می‌گویم و سعی
-          می‌کنم مفاهیم پیچیده را به زبان ساده توضیح دهم. امیدوارم در این سفر
-          یادگیری همراه من باشید.
+        <p className="text-neutral-700 dark:text-gray-300 text-base leading-8">
+          سلام! من{" "}
+          <strong className="text-primary dark:text-yellow-400">
+            امیرحسین ورمانلی
+          </strong>{" "}
+          هستم. توسعه‌دهنده وب و عاشق یادگیری و به اشتراک‌گذاری دانش. هدف من از
+          راه‌اندازی این وبلاگ، ارائه محتوای مفید و کاربردی برای برنامه‌نویسان و
+          علاقه‌مندان به فناوری است. اینجا، از تجربیاتم در پروژه‌های مختلف و
+          چالش‌های کاری می‌گویم و سعی می‌کنم مفاهیم پیچیده را به زبان ساده توضیح
+          دهم. امیدوارم در این سفر یادگیری همراه من باشید.
         </p>
       </div>
     </div>

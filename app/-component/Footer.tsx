@@ -1,14 +1,50 @@
-import { FaGithub } from "react-icons/fa";
+import { FaGithub, FaLinkedin, FaEnvelope } from "react-icons/fa";
 
 function Footer() {
   return (
-    <div className="flex items-center justify-center gap-2 py-10 md:p-10 text-lg bg-[#400068] text-white/80 ">
-      <FaGithub
-        className="mb-1 text-2xl cursor-pointer "
-        href="https://github.com/Varmanli/BLOG?tab=readme-ov-file#readme"
-      />
-      <h1>Development By Amirhosein Varmanli</h1>
-    </div>
+    <footer className="bg-[#1E3A5F] dark:bg-[#14283D] text-gray-200 py-8 px-6">
+      <div className="container mx-auto flex flex-col md:flex-row justify-between items-center text-center md:text-right gap-6">
+        <p className="text-sm md:text-base text-gray-300 dark:text-gray-400">
+          به یادگیری و پیشرفت ادامه بده، آینده از آنِ تلاشگران است!
+        </p>
+
+        <div className="flex gap-6 justify-center">
+          <a
+            href="https://github.com/Varmanli"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-2xl text-gray-300 dark:text-gray-400 hover:text-white dark:hover:text-yellow-400 transition-transform transform hover:scale-110"
+          >
+            <FaGithub />
+          </a>
+          <a
+            href="https://www.linkedin.com/in/amirhosein-varmanli"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-2xl text-gray-300 dark:text-gray-400 hover:text-white dark:hover:text-yellow-400 transition-transform transform hover:scale-110"
+          >
+            <FaLinkedin />
+          </a>
+          <a
+            href="mailto:varmanliamirhosein@gmail.com"
+            className="text-2xl text-gray-300 dark:text-gray-400 hover:text-white dark:hover:text-yellow-400 transition-transform transform hover:scale-110"
+          >
+            <FaEnvelope />
+          </a>
+        </div>
+      </div>
+
+      <div className="mt-6 border-t border-gray-700 dark:border-gray-600 pt-4 text-center text-sm text-gray-400">
+        © {new Date().getFullYear()} تمامی حقوق محفوظ است |
+        <a
+          href="https://varmanli.ir"
+          className="text-yellow-400 hover:underline hover:text-yellow-300 transition"
+        >
+          {" "}
+          varmanli.ir
+        </a>
+      </div>
+    </footer>
   );
 }
 

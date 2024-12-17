@@ -1,11 +1,10 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
+import localFont from "next/font/local";
 import "./globals.css";
-import localFont from "@next/font/local";
 import Header from "./-component/Header";
 import Footer from "./-component/Footer";
-
-const inter = Inter({ subsets: ["latin"] });
+import ThemeProvider from "./context/ThemeProvider";
 
 const iranyekan = localFont({
   src: "../public/IRANYekan.ttf",
@@ -18,15 +17,17 @@ export const metadata: Metadata = {
 
 export default function RootLayout({
   children,
-}: Readonly<{
+}: {
   children: React.ReactNode;
-}>) {
+}) {
   return (
-    <html dir="rtl">
+    <html lang="fa" dir="rtl">
       <body className={iranyekan.className}>
-        <Header />
-        {children}
-        <Footer />
+        <ThemeProvider>
+          <Header />
+          {children}
+          <Footer />
+        </ThemeProvider>
       </body>
     </html>
   );

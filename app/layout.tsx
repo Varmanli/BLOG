@@ -5,6 +5,7 @@ import "./globals.css";
 import Header from "./-component/Header";
 import Footer from "./-component/Footer";
 import ThemeProvider from "./context/ThemeProvider";
+import "highlight.js/styles/atom-one-dark.css";
 
 const iranyekan = localFont({
   src: "../public/IRANYekan.ttf",

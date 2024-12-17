@@ -21,7 +21,7 @@ function Page() {
         {/* بخش تصویر */}
         <div className="flex flex-col md:flex-col-reverse basis-1/2">
           <Image src={contact} alt="callimage" />
-          <h2 className="text-primary dark:text-yellow-400 text-center text-lg font-semibold">
+          <h2 className="text-primary dark:text-yellow-400 text-center lg:text-lg font-semibold">
             از تمام نظرات و پیشنهادات و انتقادات استقبال می‌کنم.
           </h2>
         </div>

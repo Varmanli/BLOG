@@ -8,7 +8,7 @@ function HeroSection() {
         <Image src={image} alt="یک پسر پشت کامپیوتر" />
       </div>
       <div className="w-full md:w-2/3 flex flex-col items-start text-right md:pr-10">
-        <h2 className="text-primary dark:text-yellow-400 mb-4 text-3xl font-extrabold leading-relaxed">
+        <h2 className="text-primary dark:text-yellow-400 mb-4 text-xl md:text-3xl font-extrabold leading-relaxed">
           به دنیای برنامه‌نویسی خوش اومدی!
         </h2>
         <p className="text-neutral-700 dark:text-gray-300 mb-6 leading-8">

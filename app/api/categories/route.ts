@@ -2,22 +2,26 @@ import { NextRequest, NextResponse } from "next/server";
 import { connectDB } from "@/lib/db";
 import Category from "@/models/Category";
 
-connectDB();
-
+// GET دسته‌بندی‌ها
 export async function GET() {
   try {
+    await connectDB(); // اتصال دیتابیس اینجا زده میشه
     const categories = await Category.find().sort({ createdAt: -1 });
+
     return NextResponse.json(categories, { status: 200 });
-  } catch (error) {
+  } catch (error: any) {
+    console.error("GET /api/categories error:", error);
     return NextResponse.json(
-      { message: "خطا در دریافت دسته‌بندی‌ها", error },
+      { message: "خطا در دریافت دسته‌بندی‌ها", error: error.message },
       { status: 500 }
     );
   }
 }
 
+// POST ایجاد دسته‌بندی جدید
 export async function POST(req: NextRequest) {
   try {
+    await connectDB(); // اینجا هم اتصال زده میشه
     const body = await req.json();
     const { name, slug } = body;
 
@@ -38,9 +42,10 @@ export async function POST(req: NextRequest) {
 
     const newCategory = await Category.create({ name, slug });
     return NextResponse.json(newCategory, { status: 201 });
-  } catch (error) {
+  } catch (error: any) {
+    console.error("POST /api/categories error:", error);
     return NextResponse.json(
-      { message: "خطا در ایجاد دسته‌بندی", error },
+      { message: "خطا در ایجاد دسته‌بندی", error: error.message },
       { status: 500 }
     );
   }

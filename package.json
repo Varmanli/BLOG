@@ -22,11 +22,14 @@
     "@tiptap/pm": "^3.4.2",
     "@tiptap/react": "^3.4.2",
     "@tiptap/starter-kit": "^3.4.2",
+    "bcryptjs": "^3.0.2",
     "chart.js": "^4.4.7",
     "cloudinary": "^2.7.0",
     "clsx": "^2.1.1",
     "dotenv": "^17.2.2",
+    "framer-motion": "^12.23.12",
     "html-react-parser": "^5.2.6",
+    "jsonwebtoken": "^9.0.2",
     "mongoose": "^8.18.1",
     "next": "14.2.7",
     "react": "^18",
@@ -39,6 +42,7 @@
     "sharp": "^0.34.3"
   },
   "devDependencies": {
+    "@types/jsonwebtoken": "^9.0.10",
     "@types/node": "^20",
     "@types/react": "^18",
     "@types/react-dom": "^18",

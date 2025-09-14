@@ -44,7 +44,7 @@ const RichEditor: FC<Props> = ({ value = "", onChange }) => {
     editorProps: {
       attributes: {
         class:
-          "prose prose-sm sm:prose-base lg:prose-lg xl:prose-2xl outline-none",
+          "prose prose-sm sm:prose-base lg:prose-lg xl:prose-2xl outline-none bg-slate-600 p-4 rounded-md text-white w-full max-w-5xl",
       },
     },
     onUpdate: ({ editor }) => {
@@ -63,9 +63,9 @@ const RichEditor: FC<Props> = ({ value = "", onChange }) => {
 
   return (
     <>
-      <div className="flex flex-col space-y-6 h-screen">
+      <div className="flex flex-col space-y-6 h-screen ">
         {/* Toolbar */}
-        <div className="sticky top-0 bg-white z-50 border-b">
+        <div className="sticky top-0 bg-accent z-50 border-b ">
           <Tools
             editor={editor}
             onImageSelection={() => setShowImageGallery(true)}
@@ -74,17 +74,10 @@ const RichEditor: FC<Props> = ({ value = "", onChange }) => {
 
         {/* Editor */}
         <div className="flex-1">
-          <EditorContent editor={editor} className="h-full" />
-        </div>
-
-        {/* Debug / Save button */}
-        <div className="p-4 text-right">
-          <button
-            onClick={() => console.log(editor?.getHTML())}
-            className="px-4 py-2 bg-black text-white rounded"
-          >
-            Create New Post
-          </button>
+          <EditorContent
+            editor={editor}
+            className="min-h-[600px] w-full max-w-5xl mx-auto bg-slate-600 prose prose-sm sm:prose-base lg:prose-lg xl:prose-2xl outline-none p-6 rounded-lg shadow"
+          />
         </div>
       </div>
 

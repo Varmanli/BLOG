@@ -1,51 +1,53 @@
-import Image from "next/image";
-import Link from "next/link";
+"use client";
 
-interface PropsPost {
-  image?: string;
-  title: string;
-  paragraph: React.ReactNode;
-  slug: string;
-  id?: string;
+import { motion } from "framer-motion";
+import Link from "next/link";
+import { IBlog } from "@/models/Blog";
+import Image from "next/image";
+
+interface BlogCardProps {
+  blog: IBlog;
 }
 
-export default function BlogCard({
-  image,
-  title,
-  paragraph,
-  slug,
-  id,
-}: PropsPost) {
+export default function BlogCard({ blog }: BlogCardProps) {
   return (
-    <div className="flex flex-col items-end justify-between gap-4 p-4 border border-[#BAC6D3] rounded-2xl bg-white dark:bg-background dark:border-gray-700 transition-all hover:shadow-lg">
-      {/* تصویر */}
-      {image && (
-        <div className="w-full h-[200px] md:h-[180px] lg:h-[220px] relative overflow-hidden rounded-xl">
-          <Image
-            src={image}
-            alt={title}
-            className="object-cover w-full h-full transition-transform hover:scale-105"
-            fill
-          />
-        </div>
-      )}
+    <motion.div
+      whileHover={{ scale: 1.05 }}
+      whileTap={{ scale: 0.98 }}
+      className="relative group rounded-2xl overflow-hidden shadow-lg bg-white dark:bg-gray-800 transition-all duration-500"
+    >
+      {/* (gradient overlay) */}
+      <div className="absolute inset-0 bg-gradient-to-r from-zinc-400/20 via-zinc-400/20 to-slate-400/20 opacity-0 group-hover:opacity-100 blur-2xl transition duration-500" />
 
-      {/* متن */}
-      <div className="flex flex-col gap-3 w-full text-right">
-        <h2 className="text-primary dark:text-[#00FF99] font-bold text-lg line-clamp-2">
-          {title}
-        </h2>
-        <p className="text-neutral-700 dark:text-gray-300 text-sm line-clamp-4">
-          {paragraph}
-        </p>
+      {/* تصویر */}
+      <div className="h-48 w-full overflow-hidden relative">
+        <Image
+          src={blog.coverImage || "/fallback.png"}
+          alt={blog.title}
+          className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+          fill
+        />
+
+        {/* شاین افکت */}
+        <div className="absolute inset-0 translate-x-[-100%] group-hover:translate-x-[200%] bg-gradient-to-r from-transparent via-white/40 to-transparent transition-transform duration-700" />
       </div>
 
-      {/* دکمه ادامه مطلب */}
-      <Link href={`/posts/${id || slug}`}>
-        <button className="text-primary dark:text-[#00FF99] text-sm w-full py-2 font-semibold border border-primary dark:border-[#00FF99] rounded-xl hover:bg-primary hover:text-white dark:hover:bg-[#00FF99] dark:hover:text-gray-900 transition-all">
-          ادامه مطلب
-        </button>
-      </Link>
-    </div>
+      {/* محتوا */}
+      <div className="relative p-5 z-10">
+        <h3 className="text-xl font-semibold text-gray-900 dark:text-gray-100 mb-2 group-hover:text-pink-500 transition">
+          {blog.title}
+        </h3>
+
+        {/* دکمه سمت چپ */}
+        <div className="flex justify-end">
+          <Link
+            href={`/blogs/${blog._id}`}
+            className="px-4 py-2 rounded-lg bg-gradient-to-r from-pink-500 to-indigo-500 text-white text-sm font-semibold shadow hover:opacity-90 transition mt-3"
+          >
+            مطالعه مقاله
+          </Link>
+        </div>
+      </div>
+    </motion.div>
   );
 }

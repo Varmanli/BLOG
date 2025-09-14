@@ -3,7 +3,7 @@
 @tailwind utilities;
 html,
 body {
-  @apply bg-gray-50 dark:bg-[#1c1c22];
+  @apply bg-rose-200 dark:bg-[#0f0f20];
 }
 
 body {
@@ -30,4 +30,103 @@ body::-webkit-scrollbar-thumb {
   body {
     scrollbar-color: var(--sb-thumb-color) var(--sb-track-color);
   }
+}
+/* =======================
+   HeroTyping Animations
+======================= */
+
+/* Caret */
+.blinking-caret {
+  width: 10px;
+  border-radius: 2px;
+  animation: blink 1s steps(2, end) infinite;
+  box-shadow: 0 0 12px var(--caret-shadow);
+  background: var(--caret-bg);
+}
+
+/* Floating snippets */
+.floating-snippet {
+  position: absolute;
+  font-family: monospace;
+  font-size: 0.875rem;
+  white-space: nowrap;
+  animation: floaty 20s linear infinite;
+  color: var(--snippet-color);
+}
+
+/* Floating symbols */
+.floating-symbol {
+  position: absolute;
+  font-weight: bold;
+  font-family: monospace;
+  animation: spinFloat 25s linear infinite;
+  background: var(--symbol-gradient);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* Keyframes */
+@keyframes blink {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0;
+  }
+}
+
+@keyframes floaty {
+  0% {
+    transform: translateY(0) translateX(0) scale(1);
+    opacity: 0.3;
+  }
+  25% {
+    transform: translateY(-40px) translateX(30px) scale(1.1);
+    opacity: 0.8;
+  }
+  50% {
+    transform: translateY(0) translateX(60px) scale(1);
+    opacity: 0.4;
+  }
+  75% {
+    transform: translateY(40px) translateX(30px) scale(1.1);
+    opacity: 0.7;
+  }
+  100% {
+    transform: translateY(0) translateX(0) scale(1);
+    opacity: 0.3;
+  }
+}
+
+@keyframes spinFloat {
+  0% {
+    transform: translateY(0) rotate(0deg);
+    opacity: 0.2;
+  }
+  50% {
+    transform: translateY(-50px) rotate(180deg);
+    opacity: 0.7;
+  }
+  100% {
+    transform: translateY(0) rotate(360deg);
+    opacity: 0.2;
+  }
+}
+
+/* =======================
+   Dark/Light Mode Variables
+======================= */
+:root {
+  --caret-bg: rgba(0, 200, 255, 0.9);
+  --caret-shadow: rgba(0, 200, 255, 0.6);
+  --snippet-color: rgba(34, 197, 94, 0.7);
+  --symbol-gradient: linear-gradient(90deg, #f0f, #0ff, #a0f);
+}
+
+.dark {
+  --caret-bg: rgba(0, 255, 200, 0.9);
+  --caret-shadow: rgba(0, 255, 200, 0.6);
+  --snippet-color: rgba(34, 197, 94, 0.7);
+  --symbol-gradient: linear-gradient(90deg, #f0f, #0ff, #a0f);
 }

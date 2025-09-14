@@ -4,9 +4,7 @@ const nextConfig = {
     remotePatterns: [
       {
         protocol: "https",
-        hostname: "strapi-blog.liara.run",
-        port: "",
-        pathname: "/uploads/**",
+        hostname: "res.cloudinary.com",
       },
     ],
   },

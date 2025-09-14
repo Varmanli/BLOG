@@ -13,8 +13,8 @@ const config: Config = {
     extend: {
       colors: {
         accent: "#00FF99",
-        background: "#1c1c22",
-        dark: "#1E1E22",
+        background: "#0f0f20",
+        dark: "#2222",
         primary: "#55008A",
         secondary: "#FFAB00",
         neutral: "#414A53",

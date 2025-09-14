@@ -1,47 +1,158 @@
-import Image from "next/image";
-import image from "@/public/imagehero.png";
+"use client";
+import React, { useEffect, useRef, useState } from "react";
 
-function HeroSection() {
+export default function HeroTyping({
+  lines = [
+    "// NexPad → دنیای کد در بُعد آینده",
+    "// آموزش الگوریتم‌ها به زبان ساده و خفن",
+    "const stack = ['JavaScript', 'TypeScript', 'React'];",
+    "for (let skill of stack) learn(skill);",
+    "function dream() { return 'Code. Create. Conquer.' }",
+  ],
+  typeSpeed = 40,
+  pauseBetweenLines = 900,
+  loop = true,
+}) {
+  const [display, setDisplay] = useState("");
+  const [lineIndex, setLineIndex] = useState(0);
+  const [charIndex, setCharIndex] = useState(0);
+  const [isTyping, setIsTyping] = useState(true);
+  const mountedRef = useRef(true);
+
+  useEffect(() => {
+    mountedRef.current = true;
+    return () => {
+      mountedRef.current = false;
+    };
+  }, []);
+
+  useEffect(() => {
+    if (!mountedRef.current) return;
+    let timeoutId;
+    const currentLine = lines[lineIndex] ?? "";
+
+    if (isTyping) {
+      if (charIndex <= currentLine.length) {
+        timeoutId = setTimeout(() => {
+          if (!mountedRef.current) return;
+          setDisplay(currentLine.slice(0, charIndex));
+          setCharIndex((c) => c + 1);
+        }, typeSpeed);
+      } else {
+        timeoutId = setTimeout(() => {
+          if (!mountedRef.current) return;
+          setIsTyping(false);
+        }, pauseBetweenLines);
+      }
+    } else {
+      timeoutId = setTimeout(() => {
+        if (!mountedRef.current) return;
+        const nextIndex = lineIndex + 1;
+        if (nextIndex >= lines.length) {
+          if (loop) {
+            setLineIndex(0);
+            setCharIndex(0);
+            setIsTyping(true);
+          }
+        } else {
+          setLineIndex(nextIndex);
+          setCharIndex(0);
+          setIsTyping(true);
+        }
+      }, 300);
+    }
+
+    return () => clearTimeout(timeoutId);
+  }, [
+    charIndex,
+    isTyping,
+    lineIndex,
+    lines,
+    typeSpeed,
+    pauseBetweenLines,
+    loop,
+  ]);
+
+  // Floating code snippets
+  const snippets = [
+    "function learn() { return '🚀 knowledge'; }",
+    "<div class='matrix'>0101</div>",
+    "console.log('未来へようこそ');",
+    "if(future) { create(); }",
+    "// Floating code...",
+  ];
+
+  // Floating symbols for background vibe
+  const symbols = ["{", "}", "<", ">", "/", "="];
+
   return (
-    <div className="flex flex-col-reverse md:flex-row-reverse justify-center items-center px-7 py-14 bg-white dark:bg-background">
-      {/* تصویر */}
-      <div className="w-full md:w-1/3 flex justify-center mb-6 md:mb-0">
-        <Image src={image} alt="برنامه‌نویس در حال کدنویسی" priority />
+    <section
+      className="relative w-full min-h-[100vh] flex items-center justify-center py-16 px-6 overflow-hidden"
+      dir="rtl"
+    >
+      {/* Proper background layer */}
+      <div className="absolute inset-0 -z-20 bg-gradient-to-b from-[#0b0f14] via-[#111827] to-[#0b0f14]">
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_20%,rgba(236,72,153,0.15),transparent_40%),radial-gradient(circle_at_80%_80%,rgba(34,211,238,0.15),transparent_40%)]" />
       </div>
 
-      {/* متن */}
-      <div className="w-full md:w-2/3 flex flex-col items-start text-right md:pr-10">
-        <h2 className="text-accent mb-5 text-2xl md:text-4xl font-extrabold leading-relaxed">
-          دنیای کدنویسی همینجاست! 💻
-        </h2>
+      {/* Floating code snippets */}
+      <div className="absolute inset-0 z-0 overflow-hidden">
+        {snippets.map((txt, i) => (
+          <span
+            key={i}
+            className="floating-snippet absolute text-xs md:text-sm font-mono text-cyan-300/70 whitespace-nowrap"
+            style={{
+              top: `${15 + i * 15}%`,
+              left: `${((i * 37) % 80) + 10}%`,
+            }}
+          >
+            {txt}
+          </span>
+        ))}
 
-        <p className="text-gray-700 dark:text-gray-400 mb-8 leading-8">
-          برنامه‌نویسی فقط یاد گرفتن دستورها نیست، یه سفره به سمت{" "}
-          <strong className="text-accent">خلاقیت</strong> و{" "}
-          <strong className="text-accent">حل مسئله</strong>.<br /> اینجا قراره
-          با هم کدنویسی رو ساده، کاربردی و هیجان‌انگیز یاد بگیریم.
-          <br /> از صفر تا پیشرفته، با مثال‌ها و تجربه‌های واقعی جلو میریم.
-          آماده‌ای شروع کنی؟ 🚀
+        {Array.from({ length: 20 }).map((_, i) => (
+          <span
+            key={`sym-${i}`}
+            className="floating-symbol absolute text-2xl md:text-3xl font-bold select-none bg-gradient-to-r from-fuchsia-400 via-cyan-400 to-purple-500 bg-clip-text text-transparent"
+            style={{
+              top: `${Math.random() * 100}%`,
+              left: `${Math.random() * 100}%`,
+              animationDelay: `${i * 1.2}s`,
+            }}
+          >
+            {symbols[i % symbols.length]}
+          </span>
+        ))}
+      </div>
+
+      <div className="max-w-4xl w-full text-center text-white relative z-10">
+        <h1 className="text-3xl md:text-5xl font-mono font-bold leading-tight text-green-700 drop-shadow-[0_0_12px_rgba(34,197,94,0.8)] dark:text-green-400">
+          $ welcome_to NexPad
+        </h1>
+        <p className="text-base md:text-lg font-mono text-green-800/90 mt-4 dark:text-green-300/80">
+          [system] → پلتفرم آموزشی برای توسعه‌دهنده‌های آینده
         </p>
 
-        {/* دکمه‌ها */}
-        <div className="flex gap-4">
-          <a
-            href="/posts"
-            className="bg-accent text-black px-6 py-2 rounded-md shadow hover:bg-accent/80 transition-all"
+        <div className="mt-8 rounded-xl p-6 bg-black/60 border border-fuchsia-500/20 backdrop-blur-md shadow-2xl font-mono text-left max-w-2xl mx-auto">
+          <pre
+            className="m-0 whitespace-pre-wrap text-[14px] md:text-[15px] leading-snug"
+            dir="ltr"
+            aria-live="polite"
           >
-            شروع یادگیری
-          </a>
-          <a
-            href="/posts"
-            className="bg-transparent text-accent border border-accent px-6 py-2 rounded-md hover:bg-accent hover:text-black transition-all"
-          >
-            همه مقالات
-          </a>
+            <code>
+              <span className="text-green-300">{display}</span>
+              <span className="inline-block w-[10px] align-middle ml-1">
+                <span
+                  className="blinking-caret inline-block h-5"
+                  aria-hidden="true"
+                >
+                  &nbsp;
+                </span>
+              </span>
+            </code>
+          </pre>
         </div>
       </div>
-    </div>
+    </section>
   );
 }
-
-export default HeroSection;

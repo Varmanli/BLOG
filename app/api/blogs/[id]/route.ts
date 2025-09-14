@@ -23,7 +23,7 @@ export async function GET(
     return NextResponse.json({ error: "مشکل در گرفتن بلاگ" }, { status: 500 });
   }
 }
-
+                                                                    
 export async function PUT(
   req: Request,
   { params }: { params: { id: string } }
@@ -69,4 +69,3 @@ export async function DELETE(
     return NextResponse.json({ error: "مشکل در حذف بلاگ" }, { status: 500 });
   }
 }
-

@@ -29,3 +29,4 @@ const BlogSchema = new Schema<IBlog>(
 
 const Blog = models.Blog || model<IBlog>("Blog", BlogSchema);
 export default Blog;
+ 

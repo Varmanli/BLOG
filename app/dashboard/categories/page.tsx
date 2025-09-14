@@ -77,7 +77,7 @@ export default function ManageCategoriesPage() {
     );
 
   return (
-    <main className="p-6 bg-gray-50 dark:bg-[#1c1c22] text-gray-900 dark:text-gray-100 min-h-screen relative">
+    <main className="p-6  text-gray-900 dark:text-gray-100 min-h-screen relative">
       <Toaster position="top-right" />
 
       <h1 className="text-3xl font-bold mb-6 text-primary dark:text-[#00FF99]">
@@ -105,7 +105,7 @@ export default function ManageCategoriesPage() {
       {error && <p className="text-red-600 dark:text-red-400 mb-4">{error}</p>}
 
       <div className="overflow-x-auto">
-        <table className="w-full bg-white dark:bg-[#1e1e22] shadow-md rounded-lg">
+        <table className="w-full bg-white dark:bg-[#1e1e22] shadow-md rounded-xl">
           <thead>
             <tr className="bg-gray-200 dark:bg-[#1c1c22] text-gray-700 dark:text-gray-300">
               <th className="p-3 text-right">نام دسته‌بندی</th>

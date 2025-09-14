@@ -1,14 +1,51 @@
 import type { Metadata } from "next";
-import localFont from "next/font/local";
+import { Vazirmatn } from "next/font/google";
 import "./globals.css";
+import { Toaster } from "react-hot-toast";
 
-const iranyekan = localFont({
-  src: "../public/IRANYekan.ttf",
+// استفاده از فونت Vazirmatn از گوگل
+const vazir = Vazirmatn({
+  subsets: ["latin", "arabic"],
+  weight: ["300", "400", "500", "700"],
+  display: "swap",
 });
 
 export const metadata: Metadata = {
-  title: "Varmanli Blog",
-  description: "وبلاگ های برنامه نویسی",
+  title: "NexPad | آموزش برنامه نویسی مدرن",
+  description:
+    "NexPad یک وبلاگ تخصصی برای یادگیری برنامه نویسی مدرن است. اینجا می‌توانید آموزش‌های جامع و کاربردی درباره JavaScript، React، Next.js، Node.js و تکنولوژی‌های روز دنیای وب بخوانید.",
+  keywords: [
+    "NexPad",
+    "آموزش برنامه نویسی",
+    "وبلاگ برنامه نویسی",
+    "جاوااسکریپت",
+    "React",
+    "Next.js",
+    "Node.js",
+    "وب",
+    "فرانت اند",
+    "بک اند",
+  ],
+  icons: {
+    icon: "/favicon.png",
+  },
+  authors: [{ name: "Amirhossein Varmanli" }],
+  openGraph: {
+    title: "NexPad | آموزش برنامه نویسی مدرن",
+    description:
+      "وبلاگ NexPad مرجعی برای مقالات آموزشی در زمینه برنامه نویسی وب، جاوااسکریپت، React، Next.js و Node.js.",
+    url: "https://nexpad.com",
+    siteName: "NexPad",
+    locale: "fa_IR",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "NexPad | آموزش برنامه نویسی مدرن",
+    description:
+      "مقالات آموزشی تخصصی در زمینه برنامه نویسی وب و تکنولوژی‌های روز دنیای توسعه.",
+    creator: "@nexpad",
+  },
 };
 
 export default function RootLayout({
@@ -18,10 +55,10 @@ export default function RootLayout({
 }) {
   return (
     <html lang="fa" dir="rtl">
-      <body className={`${iranyekan.className} min-h-screen`}>
+      <body className={`${vazir.className} min-h-screen`}>
         {children}
+        <Toaster position="top-center" reverseOrder={false} />
       </body>
     </html>
   );
 }
-

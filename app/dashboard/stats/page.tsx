@@ -108,7 +108,7 @@ export default function StatsPage() {
   };
 
   return (
-    <main className="p-6 bg-gray-50 dark:bg-[#1c1c22] text-gray-900 dark:text-gray-100 min-h-screen">
+    <main className="p-6 text-gray-900 dark:text-gray-100 min-h-screen">
       <h1 className="text-3xl font-bold mb-6 text-primary dark:text-accent">
         آمار و گزارش‌ها
       </h1>

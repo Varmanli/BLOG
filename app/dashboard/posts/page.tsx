@@ -51,7 +51,7 @@ export default function ManagePostsPage() {
 
   if (loading)
     return (
-      <main className="p-6 bg-background dark:bg-[#1c1c22] text-gray-800 dark:text-gray-100 min-h-screen">
+      <main className="p-6  text-gray-800 dark:text-gray-100 min-h-screen">
         <p className="text-center text-accent dark:text-[#00FF99] mt-10">
           در حال بارگذاری بلاگ‌ها...
         </p>
@@ -59,7 +59,7 @@ export default function ManagePostsPage() {
     );
 
   return (
-    <main className="p-6 bg-background dark:bg-[#1c1c22] min-h-screen text-gray-900 dark:text-gray-100">
+    <main className="p-6 min-h-screen text-gray-900 dark:text-gray-100">
       <div className="flex flex-col md:flex-row justify-between items-center mb-6 gap-4">
         <h1 className="text-3xl font-bold text-accent dark:text-[#00FF99]">
           مدیریت بلاگ‌ها

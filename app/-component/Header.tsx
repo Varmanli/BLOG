@@ -18,7 +18,7 @@ function Header() {
   const toggleMenu = () => setIsMenuOpen((prev) => !prev);
 
   return (
-    <div className="flex justify-between items-center flex-row-reverse px-5 py-5 md:px-14 bg-white dark:bg-background">
+    <div className="flex justify-between items-center flex-row-reverse px-5 py-5 md:px-14">
       {/* لوگو */}
       <Link href="/" className="flex items-center">
         <Image src={logo} alt="logo" width={120} />
@@ -40,19 +40,21 @@ function Header() {
       {/* منوی دسکتاپ */}
       <ul className="hidden md:flex items-center gap-6 font-medium text-gray-700 dark:text-gray-300">
         <li>
+          {" "}
+          {/* دکمه Dark Mode موبایل */}
+          <button
+            onClick={toggleTheme}
+            className="p-2 rounded-full bg-gray-700 text-yellow-300 hover:bg-gray-600 transition"
+          >
+            {theme === "dark" ? <FaSun size={24} /> : <FaMoon size={24} />}
+          </button>
+        </li>
+        <li>
           <Link
             href="/"
             className="hover:text-blue-600 dark:hover:text-accent font-semibold   transition-all"
           >
             صفحه اصلی
-          </Link>
-        </li>
-        <li>
-          <Link
-            href="/categories"
-            className="hover:text-blue-600 dark:hover:text-accent font-semibold  transition-all"
-          >
-            دسته بندی
           </Link>
         </li>
         <li>

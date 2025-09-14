@@ -1,6 +1,6 @@
 export default function DashboardPage() {
   return (
-    <div className="flex min-h-screen bg-background dark:bg-[#1c1c22] transition-all">
+    <div className="flex min-h-screen  transition-all">
       <main className="flex-1 p-6 md:p-10">
         <h1 className="text-3xl md:text-4xl font-extrabold mb-8 text-accent dark:text-[#00FF99]">
           صفحه اصلی داشبورد

@@ -57,7 +57,6 @@ export default async function BlogPage({ params }: { params: { id: string } }) {
   return (
     <div className="max-w-5xl mx-auto py-12 px-6 md:px-10">
       {/* عکس بالای صفحه */}
-      {/* عکس بالای صفحه با گرادیانت و اطلاعات روی عکس */}
       {blog.coverImage && (
         <div className="relative w-full mt-[-50px] h-64 md:h-80 overflow-hidden rounded-2xl shadow-lg mb-6">
           <Image
@@ -71,7 +70,7 @@ export default async function BlogPage({ params }: { params: { id: string } }) {
           <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent"></div>
 
           {/* اطلاعات دسته‌بندی، تاریخ و نویسنده روی عکس */}
-          <div className="absolute bottom-4 left-0 right-0 px-6 flex items-center text-sm gap-8 text-white">
+          <div className="absolute bottom-4 left-0 right-0 px-6 flex text-[8px] md:text-sm  items-center  gap-2 md:gap-8 text-white">
             {categoryName && (
               <span className="px-3 py-1 rounded-full bg-indigo-600/80 font-medium">
                 {categoryName}

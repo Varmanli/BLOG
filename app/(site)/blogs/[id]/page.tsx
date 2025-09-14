@@ -96,7 +96,7 @@ export default async function BlogPage({ params }: { params: { id: string } }) {
       {/* محتوا */}
       <div
         className="
-    prose prose-lg max-w-none
+    prose max-w-none
     text-gray-800 dark:text-gray-200
     prose-headings:text-gray-900 dark:prose-headings:text-gray-100
     prose-headings:font-extrabold
@@ -112,6 +112,9 @@ export default async function BlogPage({ params }: { params: { id: string } }) {
     prose-pre:bg-gray-100 dark:prose-pre:bg-gray-800 prose-pre:p-4 prose-pre:rounded-lg prose-pre:overflow-x-auto
     prose-ul:list-disc prose-ol:list-decimal
     prose-li:mb-2
+
+    text-sm sm:text-base         
+    sm:prose-lg                 
   "
       >
         {parse(blog.content)}

@@ -1,6 +1,6 @@
 "use client";
 
-import { FC, useState } from "react";
+import { FC, useState, useEffect } from "react";
 import { EditorContent, useEditor } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import Underline from "@tiptap/extension-underline";
@@ -53,6 +53,13 @@ const RichEditor: FC<Props> = ({ value = "", onChange }) => {
     },
   });
 
+  // 👇 این بخش مهمه برای sync شدن مقدار بیرونی
+  useEffect(() => {
+    if (editor && value !== editor.getHTML()) {
+      editor.commands.setContent(value || "");
+    }
+  }, [value, editor]);
+
   const handleImageSelect = (image: string) => {
     editor
       ?.chain()
@@ -65,7 +72,7 @@ const RichEditor: FC<Props> = ({ value = "", onChange }) => {
     <>
       <div className="flex flex-col space-y-6 h-screen ">
         {/* Toolbar */}
-        <div className="sticky top-0 bg-accent z-50 border-b ">
+        <div className="fixed top-0 bg-accent z-50 border-b ">
           <Tools
             editor={editor}
             onImageSelection={() => setShowImageGallery(true)}

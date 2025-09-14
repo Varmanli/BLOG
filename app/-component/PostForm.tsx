@@ -288,12 +288,41 @@ export default function PostForm({ post, mode }: PostFormProps) {
         </div>
 
         {/* Content */}
-        <div>
-          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-            محتوای پست *
-          </label>
+        <div className="mb-4">
+          <div className="flex justify-between items-center mb-2">
+            <label className="text-sm font-medium text-gray-700 dark:text-gray-300">
+              محتوای پست *
+            </label>
+
+            <div className="flex gap-2">
+              <button
+                type="button"
+                onClick={() => router.push("/dashboard/posts")}
+                className="px-4 py-2 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors"
+                disabled={isLoading}
+              >
+                انصراف
+              </button>
+              <button
+                type="submit"
+                disabled={isLoading}
+                className={`px-4 py-2 rounded-lg text-white font-medium transition-colors ${
+                  isLoading
+                    ? "bg-gray-400 cursor-not-allowed"
+                    : "bg-blue-600 hover:bg-blue-700"
+                }`}
+              >
+                {isLoading
+                  ? "در حال ذخیره..."
+                  : mode === "create"
+                  ? "ایجاد پست"
+                  : "بروزرسانی پست"}
+              </button>
+            </div>
+          </div>
+
           <div
-            className={`border rounded-lg overflow-hidden ${
+            className={`border rounded-lg ${
               errors.content
                 ? "border-red-500"
                 : "border-gray-300 dark:border-gray-600"
@@ -301,38 +330,12 @@ export default function PostForm({ post, mode }: PostFormProps) {
           >
             <RichEditor value={content} onChange={setContent} />
           </div>
+
           {errors.content && (
             <p className="mt-1 text-sm text-red-600 dark:text-red-400">
               {errors.content}
             </p>
           )}
-        </div>
-
-        {/* Submit */}
-        <div className="flex justify-end gap-4 space-x-4">
-          <button
-            type="button"
-            onClick={() => router.push("/dashboard/posts")}
-            className="px-6 py-3 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors"
-            disabled={isLoading}
-          >
-            انصراف
-          </button>
-          <button
-            type="submit"
-            disabled={isLoading}
-            className={`px-6 py-3 rounded-lg text-white font-medium transition-colors ${
-              isLoading
-                ? "bg-gray-400 cursor-not-allowed"
-                : "bg-blue-600 hover:bg-blue-700"
-            }`}
-          >
-            {isLoading
-              ? "در حال ذخیره..."
-              : mode === "create"
-              ? "ایجاد پست"
-              : "بروزرسانی پست"}
-          </button>
         </div>
       </form>
     </ImageProvider>

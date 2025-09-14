@@ -1,11 +1,6 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
 import localFont from "next/font/local";
 import "./globals.css";
-import Header from "./-component/Header";
-import Footer from "./-component/Footer";
-import ThemeProvider from "./context/ThemeProvider";
-import "highlight.js/styles/atom-one-dark.css";
 
 const iranyekan = localFont({
   src: "../public/IRANYekan.ttf",
@@ -23,13 +18,10 @@ export default function RootLayout({
 }) {
   return (
     <html lang="fa" dir="rtl">
-      <body className={iranyekan.className}>
-        <ThemeProvider>
-          <Header />
-          {children}
-          <Footer />
-        </ThemeProvider>
+      <body className={`${iranyekan.className} min-h-screen`}>
+        {children}
       </body>
     </html>
   );
 }
+

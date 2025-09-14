@@ -18,10 +18,10 @@ function Header() {
   const toggleMenu = () => setIsMenuOpen((prev) => !prev);
 
   return (
-    <div className="flex justify-between items-center flex-row-reverse px-5 md:px-10 border-b bg-white dark:bg-gray-900">
+    <div className="flex justify-between items-center flex-row-reverse px-5 py-5 md:px-14 bg-white dark:bg-background">
       {/* لوگو */}
       <Link href="/" className="flex items-center">
-        <Image src={logo} alt="logo" width={80} height={40} />
+        <Image src={logo} alt="logo" width={120} />
       </Link>
 
       {/* منوی همبرگری برای موبایل */}
@@ -42,25 +42,33 @@ function Header() {
         <li>
           <Link
             href="/"
-            className="hover:text-blue-600 dark:hover:text-yellow-400 transition-all"
+            className="hover:text-blue-600 dark:hover:text-accent font-semibold   transition-all"
           >
             صفحه اصلی
           </Link>
         </li>
         <li>
           <Link
-            href="/about"
-            className="hover:text-blue-600 dark:hover:text-yellow-400 transition-all"
+            href="/categories"
+            className="hover:text-blue-600 dark:hover:text-accent font-semibold  transition-all"
           >
-            درباره من
+            دسته بندی
+          </Link>
+        </li>
+        <li>
+          <Link
+            href="/about"
+            className="hover:text-blue-600 dark:hover:text-accent font-semibold  transition-all"
+          >
+            درباره ما
           </Link>
         </li>
         <li>
           <Link
             href="/contact"
-            className="hover:text-blue-600 dark:hover:text-yellow-400 transition-all"
+            className="hover:text-blue-600 dark:hover:text-accent font-semibold  transition-all"
           >
-            تماس با من
+            تماس با ما
           </Link>
         </li>
       </ul>
@@ -108,14 +116,6 @@ function Header() {
           {theme === "dark" ? <FaSun size={24} /> : <FaMoon size={24} />}
         </button>
       </div>
-
-      <button
-        onClick={toggleTheme}
-        className="hidden md:block p-2 rounded-full bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-yellow-300 hover:shadow-md transition"
-        aria-label="تغییر تم"
-      >
-        {theme === "dark" ? <FaSun size={20} /> : <FaMoon size={20} />}
-      </button>
     </div>
   );
 }

@@ -1,56 +1,122 @@
+"use client";
+
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import { FaEdit, FaTrashAlt, FaPlus } from "react-icons/fa";
+import { toast } from "react-hot-toast";
 
-const dummyPosts = [
-  { id: 1, title: "آشنایی با جاوااسکریپت", date: "2024-04-01" },
-  { id: 2, title: "راهنمای شروع Node.js", date: "2024-04-10" },
-  { id: 3, title: "چگونه React را یاد بگیریم؟", date: "2024-04-15" },
-];
+interface Post {
+  _id: string;
+  title: string;
+  slug: string;
+  createdAt: string;
+}
 
 export default function ManagePostsPage() {
+  const [posts, setPosts] = useState<Post[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  const fetchPosts = async () => {
+    try {
+      const res = await fetch("/api/blogs");
+      if (!res.ok) throw new Error("خطا در دریافت بلاگ‌ها");
+      const data = await res.json();
+      setPosts(data);
+    } catch (err) {
+      console.error(err);
+      setError("خطا در دریافت بلاگ‌ها");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchPosts();
+  }, []);
+
+  const handleDelete = async (id: string) => {
+    const confirmDelete = confirm("آیا از حذف این بلاگ مطمئن هستید؟");
+    if (!confirmDelete) return;
+
+    try {
+      const res = await fetch(`/api/blogs/${id}`, { method: "DELETE" });
+      if (!res.ok) throw new Error();
+      toast.success("بلاگ حذف شد");
+      setPosts(posts.filter((post) => post._id !== id));
+    } catch {
+      toast.error("خطا در حذف بلاگ");
+    }
+  };
+
+  if (loading)
+    return (
+      <main className="p-6 bg-background dark:bg-[#1c1c22] text-gray-800 dark:text-gray-100 min-h-screen">
+        <p className="text-center text-accent dark:text-[#00FF99] mt-10">
+          در حال بارگذاری بلاگ‌ها...
+        </p>
+      </main>
+    );
+
   return (
-    <main className="p-6 bg-gray-100 dark:bg-gray-900 text-gray-800 dark:text-gray-300">
-      <div className="flex justify-between items-center mb-6">
-        <h1 className="text-3xl font-bold text-primary dark:text-yellow-400">
+    <main className="p-6 bg-background dark:bg-[#1c1c22] min-h-screen text-gray-900 dark:text-gray-100">
+      <div className="flex flex-col md:flex-row justify-between items-center mb-6 gap-4">
+        <h1 className="text-3xl font-bold text-accent dark:text-[#00FF99]">
           مدیریت بلاگ‌ها
         </h1>
         <Link href="/dashboard/posts/create">
-          <button className="flex items-center gap-2 px-4 py-2 bg-primary text-white rounded-md hover:bg-primary/80 transition">
+          <button className="flex items-center gap-2 px-4 py-2 bg-accent dark:bg-[#00FF99] text-white rounded-lg hover:opacity-90 transition-all">
             <FaPlus /> افزودن بلاگ جدید
           </button>
         </Link>
       </div>
 
-      {/* جدول لیست بلاگ‌ها */}
+      {error && <p className="text-red-600 dark:text-red-400 mb-4">{error}</p>}
+
       <div className="overflow-x-auto">
-        <table className="w-full bg-white dark:bg-gray-800 shadow-md rounded-lg overflow-hidden">
+        <table className="w-full bg-white dark:bg-[#1e1e22] shadow-md rounded-lg overflow-hidden">
           <thead>
-            <tr className="bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300">
+            <tr className="bg-gray-200 dark:bg-[#2a2a2e] text-gray-700 dark:text-gray-300">
               <th className="p-3 text-right">عنوان</th>
               <th className="p-3 text-right">تاریخ</th>
               <th className="p-3 text-center">عملیات</th>
             </tr>
           </thead>
           <tbody>
-            {dummyPosts.map((post) => (
+            {posts.map((post) => (
               <tr
-                key={post.id}
-                className="border-b hover:bg-gray-100 dark:hover:bg-gray-700"
+                key={post._id}
+                className="border-b hover:bg-gray-100 dark:hover:bg-[#2e2e34] transition-all"
               >
                 <td className="p-3">{post.title}</td>
-                <td className="p-3">{post.date}</td>
+                <td className="p-3">
+                  {new Date(post.createdAt).toLocaleDateString("fa-IR")}
+                </td>
                 <td className="p-3 flex justify-center gap-4">
-                  <Link href={`/dashboard/posts/edit/${post.id}`}>
-                    <button className="text-blue-500 hover:text-blue-700">
+                  <Link href={`/dashboard/posts/edit/${post._id}`}>
+                    <button className="text-blue-500 hover:text-blue-700 transition">
                       <FaEdit size={18} />
                     </button>
                   </Link>
-                  <button className="text-red-500 hover:text-red-700">
+                  <button
+                    onClick={() => handleDelete(post._id)}
+                    className="text-red-500 hover:text-red-700 transition"
+                  >
                     <FaTrashAlt size={18} />
                   </button>
                 </td>
               </tr>
             ))}
+            {posts.length === 0 && (
+              <tr>
+                <td
+                  colSpan={3}
+                  className="p-3 text-center text-gray-500 dark:text-gray-400"
+                >
+                  هیچ بلاگی موجود نیست.
+                </td>
+              </tr>
+            )}
           </tbody>
         </table>
       </div>

@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import { Bar, Line } from "react-chartjs-2";
 import {
   Chart as ChartJS,
@@ -13,6 +14,7 @@ import {
   Legend,
 } from "chart.js";
 import { FaChartBar, FaEye, FaBlog, FaTags } from "react-icons/fa";
+import { toast } from "react-hot-toast";
 
 // ثبت کامپوننت‌های Chart.js
 ChartJS.register(
@@ -26,26 +28,78 @@ ChartJS.register(
   Legend
 );
 
+interface Stats {
+  totalViews: number;
+  totalBlogs: number;
+  totalCategories: number;
+  monthlyViews: number[];
+  monthlyBlogs: number[];
+}
+
 export default function StatsPage() {
-  // داده‌های نمودار ستونی
+  const [stats, setStats] = useState<Stats | null>(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    fetch("/api/stats")
+      .then((res) => res.json())
+      .then((data: Stats) => {
+        setStats(data);
+        setLoading(false);
+      })
+      .catch((err) => {
+        console.error(err);
+        toast.error("خطا در دریافت آمار");
+        setLoading(false);
+      });
+  }, []);
+
+  if (loading)
+    return (
+      <p className="p-6 text-center text-gray-700 dark:text-gray-300">
+        در حال بارگذاری آمار...
+      </p>
+    );
+
+  if (!stats)
+    return (
+      <p className="p-6 text-center text-red-600 dark:text-red-400">
+        امکان بارگذاری آمار وجود ندارد.
+      </p>
+    );
+
+  const months = [
+    "فروردین",
+    "اردیبهشت",
+    "خرداد",
+    "تیر",
+    "مرداد",
+    "شهریور",
+    "مهر",
+    "آبان",
+    "آذر",
+    "دی",
+    "بهمن",
+    "اسفند",
+  ];
+
   const barData = {
-    labels: ["فروردین", "اردیبهشت", "خرداد", "تیر", "مرداد", "شهریور"],
+    labels: months,
     datasets: [
       {
         label: "تعداد بازدیدها",
-        data: [120, 150, 180, 220, 300, 280],
+        data: stats.monthlyViews,
         backgroundColor: "#55008A",
       },
     ],
   };
 
-  // داده‌های نمودار خطی
   const lineData = {
-    labels: ["فروردین", "اردیبهشت", "خرداد", "تیر", "مرداد", "شهریور"],
+    labels: months,
     datasets: [
       {
         label: "تعداد بلاگ‌ها",
-        data: [5, 8, 10, 15, 20, 18],
+        data: stats.monthlyBlogs,
         borderColor: "#FFAB00",
         backgroundColor: "rgba(255, 171, 0, 0.2)",
         tension: 0.3,
@@ -54,51 +108,51 @@ export default function StatsPage() {
   };
 
   return (
-    <main className="p-6 bg-gray-100 dark:bg-gray-900 text-gray-800 dark:text-gray-300">
-      <h1 className="text-3xl font-bold mb-6 text-primary dark:text-yellow-400">
+    <main className="p-6 bg-gray-50 dark:bg-[#1c1c22] text-gray-900 dark:text-gray-100 min-h-screen">
+      <h1 className="text-3xl font-bold mb-6 text-primary dark:text-accent">
         آمار و گزارش‌ها
       </h1>
 
       {/* کارت‌های آمار */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-        <div className="bg-white dark:bg-gray-800 p-5 rounded-lg shadow flex flex-col items-center">
-          <FaEye className="text-4xl text-primary dark:text-yellow-400 mb-2" />
-          <h2 className="text-lg font-semibold">تعداد بازدیدها</h2>
-          <p className="text-2xl font-bold">5,430</p>
+        <div className="bg-white dark:bg-[#1e1e22] p-6 rounded-2xl shadow flex flex-col items-center transition-all hover:shadow-lg">
+          <FaEye className="text-5xl text-primary dark:text-accent mb-3" />
+          <h2 className="text-lg font-semibold mb-1">تعداد بازدیدها</h2>
+          <p className="text-3xl font-bold">
+            {stats.totalViews.toLocaleString()}
+          </p>
         </div>
 
-        <div className="bg-white dark:bg-gray-800 p-5 rounded-lg shadow flex flex-col items-center">
-          <FaBlog className="text-4xl text-primary dark:text-yellow-400 mb-2" />
-          <h2 className="text-lg font-semibold">تعداد بلاگ‌ها</h2>
-          <p className="text-2xl font-bold">25</p>
+        <div className="bg-white dark:bg-[#1e1e22] p-6 rounded-2xl shadow flex flex-col items-center transition-all hover:shadow-lg">
+          <FaBlog className="text-5xl text-primary dark:text-accent mb-3" />
+          <h2 className="text-lg font-semibold mb-1">تعداد بلاگ‌ها</h2>
+          <p className="text-3xl font-bold">{stats.totalBlogs}</p>
         </div>
 
-        <div className="bg-white dark:bg-gray-800 p-5 rounded-lg shadow flex flex-col items-center">
-          <FaTags className="text-4xl text-primary dark:text-yellow-400 mb-2" />
-          <h2 className="text-lg font-semibold">تعداد دسته‌بندی‌ها</h2>
-          <p className="text-2xl font-bold">8</p>
+        <div className="bg-white dark:bg-[#1e1e22] p-6 rounded-2xl shadow flex flex-col items-center transition-all hover:shadow-lg">
+          <FaTags className="text-5xl text-primary dark:text-accent mb-3" />
+          <h2 className="text-lg font-semibold mb-1">تعداد دسته‌بندی‌ها</h2>
+          <p className="text-3xl font-bold">{stats.totalCategories}</p>
         </div>
 
-        <div className="bg-white dark:bg-gray-800 p-5 rounded-lg shadow flex flex-col items-center">
-          <FaChartBar className="text-4xl text-primary dark:text-yellow-400 mb-2" />
-          <h2 className="text-lg font-semibold">نمودارهای تحلیلی</h2>
+        <div className="bg-white dark:bg-[#1e1e22] p-6 rounded-2xl shadow flex flex-col items-center transition-all hover:shadow-lg">
+          <FaChartBar className="text-5xl text-primary dark:text-accent mb-3" />
+          <h2 className="text-lg font-semibold mb-1">نمودارهای تحلیلی</h2>
           <p className="text-2xl font-bold">فعال</p>
         </div>
       </div>
 
       {/* نمودارها */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-        {/* نمودار ستونی */}
-        <div className="bg-white dark:bg-gray-800 p-5 rounded-lg shadow">
-          <h2 className="text-xl font-semibold mb-4 text-primary dark:text-yellow-400">
+        <div className="bg-white dark:bg-[#1e1e22] p-6 rounded-2xl shadow transition-all hover:shadow-lg">
+          <h2 className="text-xl font-semibold mb-4 text-primary dark:text-accent">
             تعداد بازدیدها (ماهانه)
           </h2>
           <Bar data={barData} />
         </div>
 
-        {/* نمودار خطی */}
-        <div className="bg-white dark:bg-gray-800 p-5 rounded-lg shadow">
-          <h2 className="text-xl font-semibold mb-4 text-primary dark:text-yellow-400">
+        <div className="bg-white dark:bg-[#1e1e22] p-6 rounded-2xl shadow transition-all hover:shadow-lg">
+          <h2 className="text-xl font-semibold mb-4 text-primary dark:text-accent">
             تعداد بلاگ‌ها (ماهانه)
           </h2>
           <Line data={lineData} />

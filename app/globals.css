@@ -3,12 +3,12 @@
 @tailwind utilities;
 html,
 body {
-  @apply bg-gray-50 dark:bg-gray-900;
+  @apply bg-gray-50 dark:bg-[#1c1c22];
 }
 
 body {
-  --sb-track-color: #232e33;
-  --sb-thumb-color: #c2fb00;
+  --sb-track-color: #1c1c22;
+  --sb-thumb-color: #00ff99;
   --sb-size: 6px;
 }
 

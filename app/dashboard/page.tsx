@@ -1,38 +1,39 @@
-
-
 export default function DashboardPage() {
   return (
-    <div className="flex">
-      <main className="flex-1 p-6 bg-gray-100 dark:bg-gray-900 text-gray-800 dark:text-gray-300">
-        <h1 className="text-3xl font-bold mb-6 text-primary dark:text-yellow-400">
+    <div className="flex min-h-screen bg-background dark:bg-[#1c1c22] transition-all">
+      <main className="flex-1 p-6 md:p-10">
+        <h1 className="text-3xl md:text-4xl font-extrabold mb-8 text-accent dark:text-[#00FF99]">
           صفحه اصلی داشبورد
         </h1>
 
         {/* کارت‌های آمار */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          <div className="bg-white dark:bg-gray-800 p-5 rounded-lg shadow">
-            <h2 className="text-xl font-semibold text-gray-700 dark:text-gray-300">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          {/* تعداد کل وبلاگ‌ها */}
+          <div className="bg-white dark:bg-[#1E1E22] p-6 rounded-2xl shadow-md hover:shadow-lg transition-all">
+            <h2 className="text-lg md:text-xl font-semibold text-gray-700 dark:text-gray-300">
               تعداد کل وبلاگ‌ها
             </h2>
-            <p className="text-3xl font-bold text-primary dark:text-yellow-400">
+            <p className="text-3xl md:text-4xl font-bold text-accent dark:text-[#00FF99]">
               25
             </p>
           </div>
 
-          <div className="bg-white dark:bg-gray-800 p-5 rounded-lg shadow">
-            <h2 className="text-xl font-semibold text-gray-700 dark:text-gray-300">
+          {/* تعداد بازدیدکنندگان */}
+          <div className="bg-white dark:bg-[#1E1E22] p-6 rounded-2xl shadow-md hover:shadow-lg transition-all">
+            <h2 className="text-lg md:text-xl font-semibold text-gray-700 dark:text-gray-300">
               تعداد بازدیدکنندگان
             </h2>
-            <p className="text-3xl font-bold text-primary dark:text-yellow-400">
+            <p className="text-3xl md:text-4xl font-bold text-accent dark:text-[#00FF99]">
               1,542
             </p>
           </div>
 
-          <div className="bg-white dark:bg-gray-800 p-5 rounded-lg shadow">
-            <h2 className="text-xl font-semibold text-gray-700 dark:text-gray-300">
+          {/* دسته‌بندی‌ها */}
+          <div className="bg-white dark:bg-[#1E1E22] p-6 rounded-2xl shadow-md hover:shadow-lg transition-all">
+            <h2 className="text-lg md:text-xl font-semibold text-gray-700 dark:text-gray-300">
               دسته‌بندی‌های موجود
             </h2>
-            <p className="text-3xl font-bold text-primary dark:text-yellow-400">
+            <p className="text-3xl md:text-4xl font-bold text-accent dark:text-[#00FF99]">
               8
             </p>
           </div>

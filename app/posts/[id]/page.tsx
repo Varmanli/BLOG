@@ -1,69 +1,51 @@
 import Image from "next/image";
+import parse from "html-react-parser";
 
-type ContentBlock =
-  | { type: "image"; image: ImageData; children?: never }
-  | { type: "paragraph"; children: TextBlock[] }
-  | { type: "heading"; level: number; children: TextBlock[] };
-
-interface TextBlock {
-  type: "text";
-  text: string;
+interface PageProps {
+  params: { id: string };
 }
 
-async function page({ params }: any) {
-  const result = await fetch(
-    `https://strapi-blog.liara.run/api/posts/${params.id}`,
+export default async function Page({ params }: PageProps) {
+  // fetch سرور ساید
+  const res = await fetch(
+    `${process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000"}/api/blogs/${
+      params.id
+    }`,
     {
-      next: { revalidate: 10 },
+      cache: "no-store",
     }
   );
 
-  const data = await result.json();
-  const post = data.data;
-  console.log(params);
+  if (!res.ok) {
+    throw new Error("خطا در بارگذاری بلاگ");
+  }
 
-  const { Title, Context } = post.attributes;
-
-  const image = Context.find(
-    (item: { type: "image"; image: ImageData }) => item.type === "image"
-  )?.image.url;
+  const post = await res.json();
+  const { title, content, coverImage } = post;
 
   return (
-    <div className="p-10 flex flex-col justify-center items-center gap-10">
-      <div>
-        <Image
-          src={image}
-          alt="image"
-          className="rounded-xl"
-          width={750}
-          height={400}
-        />
-      </div>
-      <div className="flex flex-col justify-center  gap-10 md:mx-[100px]">
-        <h1 className="text-primary text-xl font-bold">{Title}</h1>
-        {Context.map((contentBlock: ContentBlock, index: number) => {
-          switch (contentBlock.type) {
-            case "paragraph":
-              return contentBlock.children.map((child, childIndex) => (
-                <p key={childIndex} className="text-base text-neutral/90">
-                  {child.text}
-                </p>
-              ));
-            case "heading":
-              return (
-                <h5 key={index} className="text-primary font-semibold text-lg">
-                  {contentBlock.children.map((child, childIndex) => (
-                    <span key={childIndex}>{child.text}</span>
-                  ))}
-                </h5>
-              );
-            default:
-              return null;
-          }
-        })}
+    <div className="min-h-[80vh] bg-background dark:bg-[#1c1c22] text-right text-gray-900 dark:text-gray-100 transition-all px-6 md:px-20 py-10 flex flex-col gap-10">
+      {/* تصویر اصلی */}
+      {coverImage && (
+        <div className="w-full h-[300px] md:h-[400px] relative overflow-hidden rounded-2xl">
+          <Image
+            src={coverImage}
+            alt={title}
+            fill
+            className="object-cover w-full h-full rounded-2xl"
+          />
+        </div>
+      )}
+
+      {/* عنوان */}
+      <h1 className="text-2xl md:text-4xl font-extrabold text-accent dark:text-[#00FF99]">
+        {title}
+      </h1>
+
+      {/* محتوا */}
+      <div className="prose dark:prose-invert max-w-4xl">
+        {typeof content === "string" ? parse(content) : content}
       </div>
     </div>
   );
 }
-
-export default page;

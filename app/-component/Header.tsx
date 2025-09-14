@@ -33,12 +33,12 @@ function Header() {
         {isMenuOpen ? (
           <FaTimes size={28} className="text-red-500" />
         ) : (
-          <FaBars size={28} className="text-primary dark:text-yellow-400" />
+          <FaBars size={28} className="text-green-500 dark:text-accent" />
         )}
       </button>
 
       {/* منوی دسکتاپ */}
-      <ul className="hidden md:flex items-center gap-6 font-medium text-gray-700 dark:text-gray-300">
+      <ul className="hidden md:flex items-center gap-6 font-medium text-gray-700 dark:text-gray-300 ">
         <li>
           {" "}
           {/* دکمه Dark Mode موبایل */}
@@ -77,7 +77,7 @@ function Header() {
 
       {/* منوی موبایل */}
       <div
-        className={`fixed top-0 right-0 h-screen w-2/3 bg-black/95 text-gray-300 dark:text-gray-100 flex flex-col items-center justify-center gap-8 transition-transform duration-700 ${
+        className={`fixed top-0 right-0 h-screen w-2/3 bg-black/90 text-gray-300 dark:text-gray-100 flex flex-col items-center justify-center z-50 gap-8 transition-transform duration-700 ${
           isMenuOpen ? "translate-x-0" : "translate-x-full"
         }`}
       >

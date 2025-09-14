@@ -1,61 +1,41 @@
-"use client";
-
-import { useEffect, useState } from "react";
 import { IBlog } from "@/models/Blog";
 import { ICategory } from "@/models/Category";
 import Link from "next/link";
 import BlogCard from "./BlogCard";
 
-export default function BlogSection() {
-  const [blogs, setBlogs] = useState<IBlog[]>([]);
-  const [categories, setCategories] = useState<ICategory[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+async function fetchBlogs(): Promise<IBlog[]> {
+  const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/blogs`, {
+    cache: "no-store",
+  });
+  if (!res.ok) throw new Error("خطا در دریافت بلاگ‌ها");
+  return res.json();
+}
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const [blogsRes, categoriesRes] = await Promise.all([
-          fetch("/api/blogs"),
-          fetch("/api/categories"),
-        ]);
+async function fetchCategories(): Promise<ICategory[]> {
+  const res = await fetch(
+    `${process.env.NEXT_PUBLIC_BASE_URL}/api/categories`,
+    {
+      cache: "no-store",
+    }
+  );
+  if (!res.ok) throw new Error("خطا در دریافت دسته‌بندی‌ها");
+  return res.json();
+}
 
-        if (!blogsRes.ok) throw new Error("خطا در دریافت بلاگ‌ها");
-        if (!categoriesRes.ok) throw new Error("خطا در دریافت دسته‌بندی‌ها");
+export default async function BlogSection() {
+  let blogs: IBlog[] = [];
+  let categories: ICategory[] = [];
 
-        const blogsData: IBlog[] = await blogsRes.json();
-        const categoriesData: ICategory[] = await categoriesRes.json();
-
-        setBlogs(blogsData);
-        setCategories(categoriesData);
-      } catch (err) {
-        console.error(err);
-        setError("خطا در دریافت داده‌ها");
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchData();
-  }, []);
-
-  if (loading) {
-    return (
-      <section className="py-16 z-20">
-        <div className="container mx-auto px-4 text-center">
-          <p className="text-accent dark:text-[#00FF99] text-lg animate-pulse">
-            در حال بارگذاری بلاگ‌ها...
-          </p>
-        </div>
-      </section>
-    );
-  }
-
-  if (error) {
+  try {
+    [blogs, categories] = await Promise.all([fetchBlogs(), fetchCategories()]);
+  } catch (err) {
+    console.error(err);
     return (
       <section className="py-16">
         <div className="container mx-auto px-4 text-center">
-          <p className="text-red-600 dark:text-red-400 text-lg">{error}</p>
+          <p className="text-red-600 dark:text-red-400 text-lg">
+            خطا در دریافت داده‌ها
+          </p>
         </div>
       </section>
     );
@@ -64,18 +44,18 @@ export default function BlogSection() {
   return (
     <section className="py-16 z-20">
       <div className="container mx-auto px-4">
-        {categories.map((category, catIndex) => {
+        {categories.map((category) => {
           const categoryBlogs = blogs.filter(
             (blog) => String(blog.category) === String(category._id)
           );
           if (!categoryBlogs.length) return null;
 
           return (
-            <div key={String(category._id)} className="mb-16 ">
+            <div key={String(category._id)} className="mb-16">
               <h1 className="text-4xl md:text-5xl font-extrabold bg-gradient-to-r from-pink-500 via-purple-500 to-indigo-600 text-transparent bg-clip-text animate-fadeIn mb-8 pt-4 text-center">
                 مقالات آموزشی
               </h1>
-              {/* دسته بندی */}
+
               <div className="flex justify-between items-center text-center mb-8">
                 <h2 className="text-2xl md:text-3xl font-bold text-gray-900 dark:text-gray-100 mb-2">
                   {category.name}
@@ -84,13 +64,13 @@ export default function BlogSection() {
                   مشاهده همه
                 </button>
               </div>
-              {/* بلاگ‌ها */}
+
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                 {categoryBlogs.slice(0, 3).map((blog) => (
                   <BlogCard key={String(blog._id)} blog={blog} />
                 ))}
               </div>
-              {/* دکمه نمایش همه */}
+
               {categoryBlogs.length > 3 && (
                 <div className="text-center mt-10">
                   <Link

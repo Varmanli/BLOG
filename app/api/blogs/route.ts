@@ -20,18 +20,15 @@ export async function POST(req: Request) {
     await connectDB();
     const body: Partial<IBlog> = await req.json();
 
-    // ساخت slug از title
     if (!body.title) {
       return NextResponse.json({ error: "title الزامی است" }, { status: 400 });
     }
-    const slug = body.title
-      .toLowerCase()
-      .replace(/ /g, "-")
-      .replace(/[^\w-]+/g, "");
 
-    const blog = await Blog.create({ ...body, slug });
+    const blog = await Blog.create({ ...body, slug: body.title });
+
     return NextResponse.json(blog);
-  } catch (error) {
+  } catch (error: any) {
+    console.error("Error creating blog:", error);
     return NextResponse.json({ error: "مشکل در ایجاد بلاگ" }, { status: 500 });
   }
 }

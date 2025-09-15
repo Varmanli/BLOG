@@ -43,6 +43,9 @@ export default async function BlogSection() {
 
   return (
     <section className="py-16 z-20">
+      <h1 className="text-4xl md:text-5xl font-extrabold bg-gradient-to-r from-pink-500 via-purple-500 to-indigo-600 text-transparent bg-clip-text animate-fadeIn mb-8 pt-4 text-center">
+        مقالات آموزشی
+      </h1>
       <div className="container mx-auto px-4">
         {categories.map((category) => {
           const categoryBlogs = blogs.filter(
@@ -52,10 +55,6 @@ export default async function BlogSection() {
 
           return (
             <div key={String(category._id)} className="mb-16">
-              <h1 className="text-4xl md:text-5xl font-extrabold bg-gradient-to-r from-pink-500 via-purple-500 to-indigo-600 text-transparent bg-clip-text animate-fadeIn mb-8 pt-4 text-center">
-                مقالات آموزشی
-              </h1>
-
               <div className="flex justify-between items-center text-center mb-8">
                 <h2 className="text-2xl md:text-3xl font-bold text-gray-900 dark:text-gray-100 mb-2">
                   {category.name}

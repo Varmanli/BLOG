@@ -10,13 +10,24 @@ interface BlogCardProps {
 }
 
 export default function BlogCard({ blog }: BlogCardProps) {
+  // تابع هندل کلیک
+  const handleBlogClick = async () => {
+    try {
+      await fetch(`/api/blogs/${blog._id}`, {
+        method: "PATCH",
+      });
+    } catch (error) {
+      console.error("خطا در افزایش ویو:", error);
+    }
+  };
+
   return (
     <motion.div
       whileHover={{ scale: 1.05 }}
       whileTap={{ scale: 0.98 }}
       className="relative group rounded-2xl overflow-hidden shadow-lg bg-white dark:bg-gray-800 transition-all duration-500"
     >
-      {/* (gradient overlay) */}
+      {/* gradient overlay */}
       <div className="absolute inset-0 bg-gradient-to-r from-zinc-400/20 via-zinc-400/20 to-slate-400/20 opacity-0 group-hover:opacity-100 blur-2xl transition duration-500" />
 
       {/* تصویر */}
@@ -42,6 +53,7 @@ export default function BlogCard({ blog }: BlogCardProps) {
         <div className="flex justify-end">
           <Link
             href={`/blogs/${blog._id}`}
+            onClick={handleBlogClick} 
             className="px-4 py-2 rounded-lg bg-gradient-to-r from-pink-500 to-indigo-500 text-white text-sm font-semibold shadow hover:opacity-90 transition mt-3"
           >
             مطالعه مقاله

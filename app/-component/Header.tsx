@@ -37,7 +37,6 @@ export default function Header() {
     fetchCategories();
   }, []);
 
-  // اگر context موجود نباشه، فقط منوی پیش‌فرض رو نشون میدیم (مثلا لودینگ یا خالی)
   if (!themeContext) return null;
 
   return (

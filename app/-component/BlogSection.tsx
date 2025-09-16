@@ -23,6 +23,9 @@ export default function BlogSection({
   const [categories, setCategories] = useState<ICategory[]>([]);
   const [selectedCategory, setSelectedCategory] =
     useState<string>(initialCategoryId);
+  const [sortOrder, setSortOrder] = useState<"newest" | "oldest" | "popular">(
+    "newest"
+  );
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
 
@@ -39,8 +42,10 @@ export default function BlogSection({
         ]);
         if (!blogsRes.ok || !categoriesRes.ok)
           throw new Error("خطا در دریافت داده‌ها");
+
         const blogsData = await blogsRes.json();
         const categoriesData = await categoriesRes.json();
+
         setBlogs(blogsData);
         setCategories(categoriesData);
       } catch (err) {
@@ -57,13 +62,24 @@ export default function BlogSection({
     return <Status type="loading" message="در حال دریافت بلاگ‌ها..." />;
   if (error) return <Status type="error" message="خطا در دریافت داده‌ها" />;
 
+  // فیلتر بر اساس دسته‌بندی
   const filteredBlogs =
     selectedCategory === "all"
       ? blogs
       : blogs.filter((blog) => String(blog.category) === selectedCategory);
 
-  // اگه hideTabs فعاله همه رو نشون بده، وگرنه فقط ۹ تا
-  const displayBlogs = hideTabs ? filteredBlogs : filteredBlogs.slice(0, 9);
+  // مرتب‌سازی
+  const sortedBlogs = [...filteredBlogs].sort((a, b) => {
+    if (sortOrder === "newest")
+      return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
+    if (sortOrder === "oldest")
+      return new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime();
+    if (sortOrder === "popular") return b.views - a.views;
+    return 0;
+  });
+
+  // محدود کردن تعداد بلاگ‌ها اگر hideTabs فعال نباشه
+  const displayBlogs = hideTabs ? sortedBlogs : sortedBlogs.slice(0, 9);
 
   const containerVariants = {
     hidden: { opacity: 0 },
@@ -94,7 +110,7 @@ export default function BlogSection({
 
       {/* تب دسته‌بندی */}
       {!hideTabs && (
-        <div className="flex flex-wrap justify-center gap-3 mb-10 z-10 relative">
+        <div className="flex flex-wrap justify-center gap-3 mb-4 z-10 relative">
           <button
             onClick={() => setSelectedCategory("all")}
             className={`px-5 py-2 rounded-lg font-medium transition ${
@@ -120,6 +136,53 @@ export default function BlogSection({
           ))}
         </div>
       )}
+
+      {/* مرتب‌سازی بالای کارت‌ها سمت چپ */}
+      <div className="container mx-auto px-4 flex justify-start mb-6 z-20 relative items-center">
+        <span className="font-medium text-gray-700 dark:text-gray-300 mx-2">
+          مرتب‌سازی:
+        </span>
+
+        <div className="relative inline-block group">
+          <button
+            className="px-3 py-2 rounded-lg text-center bg-gradient-to-r from-purple-500 via-pink-500 to-indigo-500
+         text-white font-semibold cursor-pointer shadow-md hover:shadow-lg hover:scale-105 transition-transform duration-200"
+          >
+            {sortOrder === "newest"
+              ? "جدیدترین"
+              : sortOrder === "oldest"
+              ? "قدیمی‌ترین"
+              : "محبوب‌ترین"}
+          </button>
+
+          <motion.div
+            initial={{ opacity: 0, y: -10, scale: 0.95 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={{ opacity: 0, y: -10, scale: 0.95 }}
+            transition={{ duration: 0.2, ease: "easeOut" }}
+            className="absolute mt-2 w-40 rounded-xl bg-white dark:bg-gray-800 shadow-xl z-20 overflow-hidden border border-gray-200 dark:border-gray-700 
+        opacity-0 scale-95 invisible group-hover:visible group-hover:opacity-100 group-hover:scale-100 transition-all duration-200"
+          >
+            {["newest", "oldest", "popular"].map((option) => (
+              <div
+                key={option}
+                onClick={() =>
+                  setSortOrder(option as "newest" | "oldest" | "popular")
+                }
+                className="px-4 py-2 cursor-pointer text-gray-700 dark:text-gray-200 
+            hover:bg-gradient-to-r hover:from-purple-500 hover:to-pink-500 hover:text-white 
+            transition-colors duration-200"
+              >
+                {option === "newest"
+                  ? "جدیدترین"
+                  : option === "oldest"
+                  ? "قدیمی‌ترین"
+                  : "محبوب‌ترین"}
+              </div>
+            ))}
+          </motion.div>
+        </div>
+      </div>
 
       {/* لیست بلاگ‌ها */}
       {displayBlogs.length ? (

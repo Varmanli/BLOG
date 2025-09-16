@@ -1,64 +1,53 @@
 "use client";
 
 import Image from "next/image";
-import logo from "@/public/logo.png";
 import Link from "next/link";
+import { useState, useEffect, useContext } from "react";
 import { FaSun, FaMoon, FaBars, FaTimes, FaChevronDown } from "react-icons/fa";
-import { useContext, useState, useEffect } from "react";
 import { ThemeContext } from "../context/ThemeProvider";
 import { ICategory } from "@/models/Category";
+import logo from "@/public/logo.png";
 
-function Header() {
+export default function Header() {
+  // هوک‌ها همیشه بالا فراخوانی می‌شوند
   const themeContext = useContext(ThemeContext);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [isDropdownOpen, setIsDropdownOpen] = useState(false); // فقط برای موبایل
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [categories, setCategories] = useState<ICategory[]>([]);
 
-  if (!themeContext) return null;
-  const { theme, toggleTheme } = themeContext;
+  const theme = themeContext?.theme;
+  const toggleTheme = themeContext?.toggleTheme;
 
-  // گرفتن دسته‌بندی‌ها
   useEffect(() => {
     async function fetchCategories() {
       try {
         const res = await fetch(
           `${process.env.NEXT_PUBLIC_BASE_URL}/api/categories`,
-          { cache: "no-store" }
+          {
+            cache: "no-store",
+          }
         );
         if (!res.ok) throw new Error("خطا در دریافت دسته‌بندی‌ها");
         const data = await res.json();
         setCategories(data);
-      } catch (error) {
-        console.error(error);
+      } catch (err) {
+        console.error(err);
       }
     }
     fetchCategories();
   }, []);
 
-  const toggleMenu = () => setIsMenuOpen((prev) => !prev);
+  // اگر context موجود نباشه، فقط منوی پیش‌فرض رو نشون میدیم (مثلا لودینگ یا خالی)
+  if (!themeContext) return null;
 
   return (
-    <div className="flex justify-between items-center flex-row-reverse px-5 py-5 md:px-14">
-      {/* لوگو */}
+    <header className="flex justify-between items-center px-5 py-5 md:px-14 relative">
       <Link href="/" className="flex items-center">
         <Image src={logo} alt="logo" width={120} />
       </Link>
 
-      {/* منوی همبرگری برای موبایل */}
-      <button
-        onClick={toggleMenu}
-        className="md:hidden p-2 text-gray-700 dark:text-gray-300 hover:scale-110 transition-transform"
-        aria-label="باز و بسته کردن منو"
-      >
-        {isMenuOpen ? (
-          <FaTimes size={28} className="text-red-500" />
-        ) : (
-          <FaBars size={28} className="text-green-500 dark:text-accent" />
-        )}
-      </button>
-
       {/* منوی دسکتاپ */}
-      <ul className="hidden md:flex items-center gap-6 font-medium text-gray-700 dark:text-gray-300 ">
+      <ul className="hidden md:flex items-center gap-6 font-medium text-gray-700 dark:text-gray-300">
         <li>
           <button
             onClick={toggleTheme}
@@ -67,6 +56,7 @@ function Header() {
             {theme === "dark" ? <FaSun size={24} /> : <FaMoon size={24} />}
           </button>
         </li>
+
         <li>
           <Link
             href="/"
@@ -76,12 +66,11 @@ function Header() {
           </Link>
         </li>
 
-        {/* دراپ‌داون مقالات */}
         <li className="relative group">
           <button className="flex items-center gap-1 hover:text-blue-600 dark:hover:text-accent font-semibold transition-all">
             مقالات <FaChevronDown size={14} />
           </button>
-          <ul className="absolute right-0 mt-2 w-48 bg-white dark:bg-gray-800 shadow-lg rounded-lg py-2 opacity-0 invisible group-hover:opacity-100 group-hover:visible group-hover:translate-y-0 translate-y-2 transition-all duration-300 z-50">
+          <ul className="absolute right-0 mt-2 w-48 bg-white dark:bg-gray-800 shadow-lg rounded-lg py-2 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 z-50">
             <li>
               <Link
                 href="/blogs"
@@ -122,16 +111,26 @@ function Header() {
       </ul>
 
       {/* منوی موبایل */}
+      <button
+        onClick={() => setIsMenuOpen((prev) => !prev)}
+        className="md:hidden p-2 text-gray-700 dark:text-gray-300 hover:scale-110 transition-transform"
+        aria-label="باز و بسته کردن منو"
+      >
+        {isMenuOpen ? (
+          <FaTimes size={28} className="text-red-500" />
+        ) : (
+          <FaBars size={28} className="text-green-500 dark:text-accent" />
+        )}
+      </button>
+
       <div
-        className={`fixed top-0 right-0 h-screen w-3/4 sm:w-2/3  backdrop-blur-md text-gray-200 flex flex-col items-start justify-center z-50 gap-6 p-6 transition-transform duration-500 ease-in-out shadow-lg rounded-l-3xl ${
+        className={`fixed top-0 right-0 h-screen w-3/4 sm:w-2/3 backdrop-blur-md text-gray-200 flex flex-col items-start justify-center z-50 gap-6 p-6 transition-transform duration-500 ease-in-out shadow-lg rounded-l-3xl ${
           isMenuOpen ? "translate-x-0" : "translate-x-full"
         }`}
       >
-        {/* دکمه بستن */}
         <button
-          onClick={toggleMenu}
+          onClick={() => setIsMenuOpen(false)}
           className="absolute top-5 right-5 text-red-500 hover:text-white p-2 rounded-full hover:bg-red-600 transition-all"
-          aria-label="بستن منو"
         >
           <FaTimes size={28} />
         </button>
@@ -144,7 +143,7 @@ function Header() {
           صفحه اصلی
         </Link>
 
-        {/* دراپ‌داون مقالات موبایل */}
+        {/* دراپ‌داون موبایل جلو */}
         <div className="w-full text-center relative">
           <button
             onClick={() => setIsDropdownOpen((prev) => !prev)}
@@ -158,10 +157,8 @@ function Header() {
               }`}
             />
           </button>
-
-          {/* دراپ‌داون جلو */}
           <div
-            className={`absolute top-full left-1/2 -translate-x-1/2 mt-2 w-48 bg-white dark:bg-gray-800 shadow-lg rounded-md overflow-hidden transform transition-all duration-300 origin-top ${
+            className={`absolute top-0 left-1/2 -translate-x-1/2 mt-0 w-48 bg-white dark:bg-gray-800 shadow-lg rounded-md overflow-hidden transform transition-all duration-300 origin-top ${
               isDropdownOpen ? "scale-y-100 opacity-100" : "scale-y-0 opacity-0"
             }`}
           >
@@ -213,8 +210,6 @@ function Header() {
           {theme === "dark" ? <FaSun size={24} /> : <FaMoon size={24} />}
         </button>
       </div>
-    </div>
+    </header>
   );
 }
-
-export default Header;

@@ -3,17 +3,37 @@
 import Image from "next/image";
 import logo from "@/public/logo.png";
 import Link from "next/link";
-import { FaSun, FaMoon, FaBars, FaTimes } from "react-icons/fa";
-import { useContext, useState } from "react";
+import { FaSun, FaMoon, FaBars, FaTimes, FaChevronDown } from "react-icons/fa";
+import { useContext, useState, useEffect } from "react";
 import { ThemeContext } from "../context/ThemeProvider";
+import { ICategory } from "@/models/Category";
 
 function Header() {
   const themeContext = useContext(ThemeContext);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false); // فقط برای موبایل
+  const [categories, setCategories] = useState<ICategory[]>([]);
 
   if (!themeContext) return null;
-
   const { theme, toggleTheme } = themeContext;
+
+  // گرفتن دسته‌بندی‌ها
+  useEffect(() => {
+    async function fetchCategories() {
+      try {
+        const res = await fetch(
+          `${process.env.NEXT_PUBLIC_BASE_URL}/api/categories`,
+          { cache: "no-store" }
+        );
+        if (!res.ok) throw new Error("خطا در دریافت دسته‌بندی‌ها");
+        const data = await res.json();
+        setCategories(data);
+      } catch (error) {
+        console.error(error);
+      }
+    }
+    fetchCategories();
+  }, []);
 
   const toggleMenu = () => setIsMenuOpen((prev) => !prev);
 
@@ -40,8 +60,6 @@ function Header() {
       {/* منوی دسکتاپ */}
       <ul className="hidden md:flex items-center gap-6 font-medium text-gray-700 dark:text-gray-300 ">
         <li>
-          {" "}
-          {/* دکمه Dark Mode موبایل */}
           <button
             onClick={toggleTheme}
             className="p-2 rounded-full bg-gray-700 text-yellow-300 hover:bg-gray-600 transition"
@@ -52,15 +70,43 @@ function Header() {
         <li>
           <Link
             href="/"
-            className="hover:text-blue-600 dark:hover:text-accent font-semibold   transition-all"
+            className="hover:text-blue-600 dark:hover:text-accent font-semibold transition-all"
           >
             صفحه اصلی
           </Link>
         </li>
+
+        {/* دراپ‌داون مقالات */}
+        <li className="relative group">
+          <button className="flex items-center gap-1 hover:text-blue-600 dark:hover:text-accent font-semibold transition-all">
+            مقالات <FaChevronDown size={14} />
+          </button>
+          <ul className="absolute right-0 mt-2 w-48 bg-white dark:bg-gray-800 shadow-lg rounded-lg py-2 opacity-0 invisible group-hover:opacity-100 group-hover:visible group-hover:translate-y-0 translate-y-2 transition-all duration-300 z-50">
+            <li>
+              <Link
+                href="/blogs"
+                className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700"
+              >
+                همه مقالات
+              </Link>
+            </li>
+            {categories.map((cat) => (
+              <li key={String(cat._id)}>
+                <Link
+                  href={`/blogs/category/${cat._id}`}
+                  className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700"
+                >
+                  {cat.name}
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </li>
+
         <li>
           <Link
             href="/about"
-            className="hover:text-blue-600 dark:hover:text-accent font-semibold  transition-all"
+            className="hover:text-blue-600 dark:hover:text-accent font-semibold transition-all"
           >
             درباره ما
           </Link>
@@ -68,7 +114,7 @@ function Header() {
         <li>
           <Link
             href="/contact"
-            className="hover:text-blue-600 dark:hover:text-accent font-semibold  transition-all"
+            className="hover:text-blue-600 dark:hover:text-accent font-semibold transition-all"
           >
             تماس با ما
           </Link>
@@ -77,14 +123,14 @@ function Header() {
 
       {/* منوی موبایل */}
       <div
-        className={`fixed top-0 right-0 h-screen w-2/3 bg-black/90 text-gray-300 dark:text-gray-100 flex flex-col items-center justify-center z-50 gap-8 transition-transform duration-700 ${
+        className={`fixed top-0 right-0 h-screen w-3/4 sm:w-2/3  backdrop-blur-md text-gray-200 flex flex-col items-start justify-center z-50 gap-6 p-6 transition-transform duration-500 ease-in-out shadow-lg rounded-l-3xl ${
           isMenuOpen ? "translate-x-0" : "translate-x-full"
         }`}
       >
         {/* دکمه بستن */}
         <button
           onClick={toggleMenu}
-          className="absolute top-4 right-4 text-red-500 hover:text-white transition-all"
+          className="absolute top-5 right-5 text-red-500 hover:text-white p-2 rounded-full hover:bg-red-600 transition-all"
           aria-label="بستن منو"
         >
           <FaTimes size={28} />
@@ -92,28 +138,77 @@ function Header() {
 
         <Link
           href="/"
-          className="text-lg font-semibold hover:text-yellow-400 transition"
+          className="text-xl font-bold hover:text-accent transition-colors"
           onClick={() => setIsMenuOpen(false)}
         >
           صفحه اصلی
         </Link>
+
+        {/* دراپ‌داون مقالات موبایل */}
+        <div className="w-full text-center relative">
+          <button
+            onClick={() => setIsDropdownOpen((prev) => !prev)}
+            className="flex items-center justify-center gap-2 text-xl font-semibold hover:text-accent transition-colors"
+          >
+            مقالات{" "}
+            <FaChevronDown
+              size={16}
+              className={`transform transition-transform duration-300 ${
+                isDropdownOpen ? "rotate-180" : ""
+              }`}
+            />
+          </button>
+
+          {/* دراپ‌داون جلو */}
+          <div
+            className={`absolute top-full left-1/2 -translate-x-1/2 mt-2 w-48 bg-white dark:bg-gray-800 shadow-lg rounded-md overflow-hidden transform transition-all duration-300 origin-top ${
+              isDropdownOpen ? "scale-y-100 opacity-100" : "scale-y-0 opacity-0"
+            }`}
+          >
+            <Link
+              href="/blogs"
+              onClick={() => {
+                setIsMenuOpen(false);
+                setIsDropdownOpen(false);
+              }}
+              className="block px-4 py-2 text-sm hover:text-accent transition-colors"
+            >
+              همه مقالات
+            </Link>
+            {categories.map((cat) => (
+              <Link
+                key={String(cat._id)}
+                href={`/blogs/category/${cat._id}`}
+                onClick={() => {
+                  setIsMenuOpen(false);
+                  setIsDropdownOpen(false);
+                }}
+                className="block px-4 py-2 text-sm hover:text-accent transition-colors"
+              >
+                {cat.name}
+              </Link>
+            ))}
+          </div>
+        </div>
+
         <Link
           href="/about"
-          className="text-lg font-semibold hover:text-yellow-400 transition"
+          className="text-xl font-bold hover:text-accent transition-colors"
           onClick={() => setIsMenuOpen(false)}
         >
-          درباره من
+          درباره ما
         </Link>
         <Link
           href="/contact"
-          className="text-lg font-semibold hover:text-yellow-400 transition"
+          className="text-xl font-bold hover:text-accent transition-colors"
           onClick={() => setIsMenuOpen(false)}
         >
-          تماس با من
+          تماس با ما
         </Link>
+
         <button
           onClick={toggleTheme}
-          className="p-3 rounded-full bg-gray-700 text-yellow-300 hover:bg-gray-600 transition"
+          className="p-3 rounded-full bg-gray-700 text-yellow-300 hover:bg-gray-600 transition-colors"
         >
           {theme === "dark" ? <FaSun size={24} /> : <FaMoon size={24} />}
         </button>

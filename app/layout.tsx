@@ -2,8 +2,8 @@ import type { Metadata } from "next";
 import { Vazirmatn } from "next/font/google";
 import "./globals.css";
 import { Toaster } from "react-hot-toast";
+import ScrollToTop from "./-component/ScrollToTop";
 
-// استفاده از فونت Vazirmatn از گوگل
 const vazir = Vazirmatn({
   subsets: ["latin", "arabic"],
   weight: ["300", "400", "500", "700"],
@@ -54,10 +54,11 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="fa" dir="rtl">
+    <html lang="fa" dir="rtl" className="dark">
       <body className={`${vazir.className} min-h-screen`}>
         {children}
         <Toaster position="top-center" reverseOrder={false} />
+        <ScrollToTop />
       </body>
     </html>
   );

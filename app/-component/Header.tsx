@@ -41,7 +41,7 @@ export default function Header() {
   if (!themeContext) return null;
 
   return (
-    <header className="flex justify-between items-center px-5 py-5 md:px-14 relative">
+    <header className="flex flex-row-reverse justify-between items-center px-5 py-5 md:px-14 relative">
       <Link href="/" className="flex items-center">
         <Image src={logo} alt="logo" width={120} />
       </Link>

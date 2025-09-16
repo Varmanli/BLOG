@@ -7,6 +7,7 @@ import BlogCard from "./BlogCard";
 import Link from "next/link";
 import Status from "./Status";
 import { motion } from "framer-motion";
+import { FaFire, FaSortAmountDownAlt, FaSortAmountUp } from "react-icons/fa";
 
 interface BlogSectionProps {
   hideTabs?: boolean;
@@ -112,6 +113,7 @@ export default function BlogSection({
       {/* ردیف دکمه‌ها: دسته‌بندی و مرتب‌سازی */}
       <div className="container mx-auto px-4 flex flex-row-reverse justify-between items-center gap-4 mb-6 z-20 relative">
         {/* Dropdown دسته‌بندی */}
+        {/* Dropdown دسته‌بندی */}
         <div className="relative w-48 md:w-56">
           {/* دکمه‌ی Dropdown */}
           <button
@@ -153,11 +155,13 @@ export default function BlogSection({
                   setSelectedCategory("all");
                   setDropdownOpen(false);
                 }}
-                className={`px-4 py-2 cursor-pointer transition-colors duration-200 hover:bg-purple-100 dark:hover:bg-purple-700 ${
-                  selectedCategory === "all"
-                    ? "bg-purple-200 dark:bg-purple-600 text-black"
-                    : "text-gray-800 dark:text-gray-200"
-                } rounded-t-lg`}
+                className={`px-4 py-2 cursor-pointer text-gray-700 dark:text-gray-200 
+            hover:bg-gradient-to-r hover:from-purple-500 hover:to-pink-500 hover:text-white 
+            transition-colors duration-20 ${
+              selectedCategory === "all"
+                ? "bg-purple-200 dark:bg-accent  text-gray-700 dark:text-gray-800  font-semibold"
+                : "text-gray-800 dark:text-gray-200"
+            } rounded-t-lg`}
               >
                 همه مقالات
               </div>
@@ -170,11 +174,13 @@ export default function BlogSection({
                     setSelectedCategory(String(cat._id));
                     setDropdownOpen(false);
                   }}
-                  className={`px-4 py-2 cursor-pointer transition-colors duration-200 hover:bg-purple-100 dark:hover:bg-purple-700 ${
-                    selectedCategory === String(cat._id)
-                      ? "bg-purple-200 dark:bg-purple-600 text-black font-semibold"
-                      : "text-gray-800 dark:text-gray-200"
-                  } ${idx === categories.length - 1 ? "rounded-b-lg" : ""}`}
+                  className={`px-4 py-2 cursor-pointer text-gray-700 dark:text-gray-200 
+            hover:bg-gradient-to-r hover:from-purple-500 hover:to-pink-500 hover:text-white 
+            transition-colors duration-200 ${
+              selectedCategory === String(cat._id)
+                ? "bg-purple-200 dark:bg-accent  text-gray-700 dark:text-gray-800  font-semibold"
+                : "text-gray-800 dark:text-gray-200"
+            } ${idx === categories.length - 1 ? "rounded-b-lg" : ""}`}
                 >
                   {cat.name}
                 </div>
@@ -202,22 +208,25 @@ export default function BlogSection({
 
         {/* مرتب‌سازی */}
         <div className="relative inline-block">
-          <span className="font-medium text-gray-700 dark:text-gray-300 mx-2 hidden md:inline">
-            مرتب‌سازی:
-          </span>
-
           <div className="relative inline-block group">
-            <button
-              className="px-3 py-2 rounded-lg text-center bg-gradient-to-r from-purple-500 via-pink-500 to-indigo-500
-         text-white font-semibold cursor-pointer shadow-md hover:shadow-lg hover:scale-105 transition-transform duration-200"
-            >
-              {sortOrder === "newest"
-                ? "جدیدترین"
-                : sortOrder === "oldest"
-                ? "قدیمی‌ترین"
-                : "محبوب‌ترین"}
+            {/* دکمه مرتب‌سازی */}
+            <button className="w-full flex justify-between items-center gap-3 px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-200 font-medium shadow-sm hover:shadow-md transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-1">
+              {sortOrder === "newest" && (
+                <>
+                  جدیدترین <FaSortAmountDownAlt />
+                </>
+              )}
+              {sortOrder === "oldest" && (
+                <>
+                  قدیمی‌ترین <FaSortAmountUp />
+                </>
+              )}
+              {sortOrder === "popular" && (
+                <>
+                  محبوب‌ترین <FaFire />
+                </>
+              )}
             </button>
-
             <motion.div
               initial={{ opacity: 0, y: -10, scale: 0.95 }}
               animate={{ opacity: 1, y: 0, scale: 1 }}

@@ -28,6 +28,7 @@ export default function BlogSection({
   );
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
+  const [dropdownOpen, setDropdownOpen] = useState(false);
 
   useEffect(() => {
     async function fetchData() {
@@ -108,127 +109,142 @@ export default function BlogSection({
           : "مقالات آموزشی"}
       </h1>
 
-      {/* تب دسته‌بندی */}
-      {!hideTabs && (
-        <div className="flex flex-wrap justify-center gap-3 mb-4 z-10 relative">
-          {(() => {
-            const limit = window.innerWidth < 768 ? 2 : 3;
-            const fixedCategories = categories.slice(0, limit);
-            const remainingCategories = categories.slice(limit);
-
-            return (
-              <>
-                {/* دسته‌بندی‌های ثابت */}
-                <button
-                  onClick={() => setSelectedCategory("all")}
-                  className={`md:px-5 px-3 py-2 rounded-lg text-[13px] md:text-base font-medium transition ${
-                    selectedCategory === "all"
-                      ? "bg-accent text-black"
-                      : "bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-gray-600"
-                  }`}
-                >
-                  همه مقالات
-                </button>
-
-                {fixedCategories.map((cat) => (
-                  <button
-                    key={String(cat._id)}
-                    onClick={() => setSelectedCategory(String(cat._id))}
-                    className={`md:px-5 px-3 py-2 rounded-lg text-[13px] md:text-base font-medium transition ${
-                      selectedCategory === String(cat._id)
-                        ? "bg-accent text-black"
-                        : "bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-gray-600"
-                    }`}
-                  >
-                    {cat.name}
-                  </button>
-                ))}
-
-                {/* دراپ‌داون برای بقیه */}
-                {remainingCategories.length > 0 && (
-                  <div className="relative inline-block group">
-                    <button
-                      className={`md:px-5 px-3 py-2 rounded-lg text-[13px] md:text-base font-medium transition
-        ${
-          selectedCategory === "dropdown"
-            ? "bg-accent text-black"
-            : "bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-gray-600"
-        }`}
-                    >
-                      سایر دسته‌بندی‌ها
-                    </button>
-
-                    <div
-                      className="absolute mt-1 w-[154px] rounded-xl bg-white dark:bg-gray-800 shadow-xl z-1000 overflow-hidden border border-gray-200 dark:border-gray-700
-      opacity-0 scale-95 invisible group-hover:visible group-hover:opacity-100 group-hover:scale-100
-      transition-all duration-200"
-                    >
-                      {remainingCategories.map((cat) => (
-                        <div
-                          key={String(cat._id)}
-                          onClick={() => setSelectedCategory(String(cat._id))}
-                          className={`px-4 py-2 cursor-pointer transition-colors duration-200 ${
-                            selectedCategory === String(cat._id)
-                              ? "bg-accent text-black"
-                              : "text-gray-700 dark:text-gray-200 hover:bg-gradient-to-r hover:from-purple-500 hover:to-pink-500 hover:text-white"
-                          }`}
-                        >
-                          {cat.name}
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                )}
-              </>
-            );
-          })()}
-        </div>
-      )}
-
-      {/* مرتب‌سازی بالای کارت‌ها سمت چپ */}
-      <div className="container mx-auto px-4 flex justify-start mb-6 z-20 relative items-center">
-        <span className="font-medium text-gray-700 dark:text-gray-300 mx-2">
-          مرتب‌سازی:
-        </span>
-
-        <div className="relative inline-block group">
+      {/* ردیف دکمه‌ها: دسته‌بندی و مرتب‌سازی */}
+      <div className="container mx-auto px-4 flex flex-row-reverse justify-between items-center gap-4 mb-6 z-20 relative">
+        {/* Dropdown دسته‌بندی */}
+        <div className="relative w-48 md:w-56">
+          {/* دکمه‌ی Dropdown */}
           <button
-            className="px-3 py-2 rounded-lg text-center bg-gradient-to-r from-purple-500 via-pink-500 to-indigo-500
-         text-white font-semibold cursor-pointer shadow-md hover:shadow-lg hover:scale-105 transition-transform duration-200"
+            onClick={() => setDropdownOpen(!dropdownOpen)}
+            className="w-full flex justify-between items-center px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-200 font-medium shadow-sm hover:shadow-md transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-1"
           >
-            {sortOrder === "newest"
-              ? "جدیدترین"
-              : sortOrder === "oldest"
-              ? "قدیمی‌ترین"
-              : "محبوب‌ترین"}
+            <span className="truncate">
+              {selectedCategory === "all"
+                ? "همه مقالات"
+                : categories.find((c) => String(c._id) === selectedCategory)
+                    ?.name || "انتخاب دسته‌بندی"}
+            </span>
+            <svg
+              className={`w-4 h-4 ml-2 transition-transform duration-200 ${
+                dropdownOpen ? "rotate-180" : ""
+              }`}
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M19 9l-7 7-7-7"
+              />
+            </svg>
           </button>
 
-          <motion.div
-            initial={{ opacity: 0, y: -10, scale: 0.95 }}
-            animate={{ opacity: 1, y: 0, scale: 1 }}
-            exit={{ opacity: 0, y: -10, scale: 0.95 }}
-            transition={{ duration: 0.2, ease: "easeOut" }}
-            className="absolute mt-2 w-40 rounded-xl bg-white dark:bg-gray-800 shadow-xl z-20 overflow-hidden border border-gray-200 dark:border-gray-700 
-        opacity-0 scale-95 invisible group-hover:visible group-hover:opacity-100 group-hover:scale-100 transition-all duration-200"
-          >
-            {["newest", "oldest", "popular"].map((option) => (
+          {/* منوی Dropdown */}
+          {dropdownOpen && (
+            <div
+              className="absolute mt-2 w-full rounded-lg bg-white dark:bg-gray-800 shadow-lg border border-gray-200 dark:border-gray-700 z-50 overflow-hidden animate-dropdown-fade"
+              style={{ animation: "dropdown-fade 0.2s ease-out" }}
+            >
+              {/* گزینه همه مقالات */}
               <div
-                key={option}
-                onClick={() =>
-                  setSortOrder(option as "newest" | "oldest" | "popular")
-                }
-                className="px-4 py-2 cursor-pointer text-gray-700 dark:text-gray-200 
+                onClick={() => {
+                  setSelectedCategory("all");
+                  setDropdownOpen(false);
+                }}
+                className={`px-4 py-2 cursor-pointer transition-colors duration-200 hover:bg-purple-100 dark:hover:bg-purple-700 ${
+                  selectedCategory === "all"
+                    ? "bg-purple-200 dark:bg-purple-600 text-black"
+                    : "text-gray-800 dark:text-gray-200"
+                } rounded-t-lg`}
+              >
+                همه مقالات
+              </div>
+
+              {/* بقیه دسته‌بندی‌ها */}
+              {categories.map((cat, idx) => (
+                <div
+                  key={String(cat._id)}
+                  onClick={() => {
+                    setSelectedCategory(String(cat._id));
+                    setDropdownOpen(false);
+                  }}
+                  className={`px-4 py-2 cursor-pointer transition-colors duration-200 hover:bg-purple-100 dark:hover:bg-purple-700 ${
+                    selectedCategory === String(cat._id)
+                      ? "bg-purple-200 dark:bg-purple-600 text-black font-semibold"
+                      : "text-gray-800 dark:text-gray-200"
+                  } ${idx === categories.length - 1 ? "rounded-b-lg" : ""}`}
+                >
+                  {cat.name}
+                </div>
+              ))}
+            </div>
+          )}
+
+          {/* افکت انیمیشن */}
+          <style jsx>{`
+            @keyframes dropdown-fade {
+              0% {
+                opacity: 0;
+                transform: translateY(-5px);
+              }
+              100% {
+                opacity: 1;
+                transform: translateY(0);
+              }
+            }
+            .animate-dropdown-fade {
+              animation: dropdown-fade 0.2s ease-out;
+            }
+          `}</style>
+        </div>
+
+        {/* مرتب‌سازی */}
+        <div className="relative inline-block">
+          <span className="font-medium text-gray-700 dark:text-gray-300 mx-2 hidden md:inline">
+            مرتب‌سازی:
+          </span>
+
+          <div className="relative inline-block group">
+            <button
+              className="px-3 py-2 rounded-lg text-center bg-gradient-to-r from-purple-500 via-pink-500 to-indigo-500
+         text-white font-semibold cursor-pointer shadow-md hover:shadow-lg hover:scale-105 transition-transform duration-200"
+            >
+              {sortOrder === "newest"
+                ? "جدیدترین"
+                : sortOrder === "oldest"
+                ? "قدیمی‌ترین"
+                : "محبوب‌ترین"}
+            </button>
+
+            <motion.div
+              initial={{ opacity: 0, y: -10, scale: 0.95 }}
+              animate={{ opacity: 1, y: 0, scale: 1 }}
+              exit={{ opacity: 0, y: -10, scale: 0.95 }}
+              transition={{ duration: 0.2, ease: "easeOut" }}
+              className="absolute mt-2 w-40 rounded-xl bg-white dark:bg-gray-800 shadow-xl z-20 overflow-hidden border border-gray-200 dark:border-gray-700 
+        opacity-0 scale-95 invisible group-hover:visible group-hover:opacity-100 group-hover:scale-100 transition-all duration-200"
+            >
+              {["newest", "oldest", "popular"].map((option) => (
+                <div
+                  key={option}
+                  onClick={() =>
+                    setSortOrder(option as "newest" | "oldest" | "popular")
+                  }
+                  className="px-4 py-2 cursor-pointer text-gray-700 dark:text-gray-200 
             hover:bg-gradient-to-r hover:from-purple-500 hover:to-pink-500 hover:text-white 
             transition-colors duration-200"
-              >
-                {option === "newest"
-                  ? "جدیدترین"
-                  : option === "oldest"
-                  ? "قدیمی‌ترین"
-                  : "محبوب‌ترین"}
-              </div>
-            ))}
-          </motion.div>
+                >
+                  {option === "newest"
+                    ? "جدیدترین"
+                    : option === "oldest"
+                    ? "قدیمی‌ترین"
+                    : "محبوب‌ترین"}
+                </div>
+              ))}
+            </motion.div>
+          </div>
         </div>
       </div>
 

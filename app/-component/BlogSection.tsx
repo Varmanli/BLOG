@@ -121,7 +121,7 @@ export default function BlogSection({
                 {/* دسته‌بندی‌های ثابت */}
                 <button
                   onClick={() => setSelectedCategory("all")}
-                  className={`px-5 py-2 rounded-lg font-medium transition ${
+                  className={`md:px-5 px-3 py-2 rounded-lg text-[13px] md:text-base font-medium transition ${
                     selectedCategory === "all"
                       ? "bg-accent text-black"
                       : "bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-gray-600"
@@ -134,7 +134,7 @@ export default function BlogSection({
                   <button
                     key={String(cat._id)}
                     onClick={() => setSelectedCategory(String(cat._id))}
-                    className={`px-5 py-2 rounded-lg font-medium transition ${
+                    className={`md:px-5 px-3 py-2 rounded-lg text-[13px] md:text-base font-medium transition ${
                       selectedCategory === String(cat._id)
                         ? "bg-accent text-black"
                         : "bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-gray-600"
@@ -148,7 +148,7 @@ export default function BlogSection({
                 {remainingCategories.length > 0 && (
                   <div className="relative inline-block group">
                     <button
-                      className={`px-5 py-2 rounded-lg font-medium transition
+                      className={`md:px-5 px-3 py-2 rounded-lg text-[13px] md:text-base font-medium transition
         ${
           selectedCategory === "dropdown"
             ? "bg-accent text-black"
@@ -159,7 +159,7 @@ export default function BlogSection({
                     </button>
 
                     <div
-                      className="absolute mt-1 w-[154px] rounded-xl bg-white dark:bg-gray-800 shadow-xl z-100 overflow-hidden border border-gray-200 dark:border-gray-700
+                      className="absolute mt-1 w-[154px] rounded-xl bg-white dark:bg-gray-800 shadow-xl z-1000 overflow-hidden border border-gray-200 dark:border-gray-700
       opacity-0 scale-95 invisible group-hover:visible group-hover:opacity-100 group-hover:scale-100
       transition-all duration-200"
                     >

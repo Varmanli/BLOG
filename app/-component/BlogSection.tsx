@@ -111,29 +111,77 @@ export default function BlogSection({
       {/* تب دسته‌بندی */}
       {!hideTabs && (
         <div className="flex flex-wrap justify-center gap-3 mb-4 z-10 relative">
-          <button
-            onClick={() => setSelectedCategory("all")}
-            className={`px-5 py-2 rounded-lg font-medium transition ${
-              selectedCategory === "all"
-                ? "bg-accent text-black"
-                : "bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-gray-600"
-            }`}
-          >
-            همه مقالات
-          </button>
-          {categories.map((cat) => (
-            <button
-              key={String(cat._id)}
-              onClick={() => setSelectedCategory(String(cat._id))}
-              className={`px-5 py-2 rounded-lg font-medium transition ${
-                selectedCategory === String(cat._id)
-                  ? "bg-accent text-black"
-                  : "bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-gray-600"
-              }`}
-            >
-              {cat.name}
-            </button>
-          ))}
+          {(() => {
+            const limit = window.innerWidth < 768 ? 2 : 3;
+            const fixedCategories = categories.slice(0, limit);
+            const remainingCategories = categories.slice(limit);
+
+            return (
+              <>
+                {/* دسته‌بندی‌های ثابت */}
+                <button
+                  onClick={() => setSelectedCategory("all")}
+                  className={`px-5 py-2 rounded-lg font-medium transition ${
+                    selectedCategory === "all"
+                      ? "bg-accent text-black"
+                      : "bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-gray-600"
+                  }`}
+                >
+                  همه مقالات
+                </button>
+
+                {fixedCategories.map((cat) => (
+                  <button
+                    key={String(cat._id)}
+                    onClick={() => setSelectedCategory(String(cat._id))}
+                    className={`px-5 py-2 rounded-lg font-medium transition ${
+                      selectedCategory === String(cat._id)
+                        ? "bg-accent text-black"
+                        : "bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-gray-600"
+                    }`}
+                  >
+                    {cat.name}
+                  </button>
+                ))}
+
+                {/* دراپ‌داون برای بقیه */}
+                {remainingCategories.length > 0 && (
+                  <div className="relative inline-block group">
+                    <button
+                      className={`px-5 py-2 rounded-lg font-medium transition
+        ${
+          selectedCategory === "dropdown"
+            ? "bg-accent text-black"
+            : "bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-gray-600"
+        }`}
+                    >
+                      سایر دسته‌بندی‌ها
+                    </button>
+
+                    <div
+                      className="absolute mt-1 w-[154px] rounded-xl bg-white dark:bg-gray-800 shadow-xl z-100 overflow-hidden border border-gray-200 dark:border-gray-700
+      opacity-0 scale-95 invisible group-hover:visible group-hover:opacity-100 group-hover:scale-100
+      transition-all duration-200"
+                    >
+                      {remainingCategories.map((cat) => (
+                        <div
+                          key={String(cat._id)}
+                          onClick={() => setSelectedCategory(String(cat._id))}
+                          className={`px-4 py-2 cursor-pointer transition-colors duration-200 ${
+                            selectedCategory === String(cat._id)
+                              ? "bg-accent text-black"
+                              : "text-gray-700 dark:text-gray-200 hover:bg-gradient-to-r hover:from-purple-500 hover:to-pink-500 hover:text-white"
+                          }`}
+                        >
+                          {cat.name}
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
+              </>
+            );
+          })()}
         </div>
       )}
 

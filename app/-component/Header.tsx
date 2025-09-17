@@ -122,7 +122,7 @@ export default function Header() {
       </button>
 
       <div
-        className={`fixed top-0 right-0 h-screen w-full max-w-sm bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 flex flex-col items-start justify-center z-50 gap-6 p-6 transition-transform duration-300 ease-in-out shadow-lg ${
+        className={`fixed top-0 right-0 h-screen w-3/4 max-w-sm bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 flex flex-col items-start justify-center z-50 gap-6 p-6 transition-transform duration-300 ease-in-out shadow-lg ${
           isMenuOpen ? "translate-x-0" : "translate-x-full"
         }`}
       >
@@ -142,7 +142,7 @@ export default function Header() {
         </Link>
 
         {/* دراپ‌داون موبایل */}
-        <div className=" text-left relative">
+        <div className="h-7 text-left relative">
           <button
             onClick={() => setIsDropdownOpen((prev) => !prev)}
             className="flex items-center justify-between w-full text-xl font-semibold hover:text-accent transition-colors"
@@ -166,7 +166,7 @@ export default function Header() {
                 setIsMenuOpen(false);
                 setIsDropdownOpen(false);
               }}
-              className="block px-4 py-2 text-sm hover:text-accent transition-colors"
+              className="block px-2  text-sm hover:text-accent transition-colors"
             >
               همه مقالات
             </Link>

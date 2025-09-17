@@ -9,7 +9,6 @@ import { ICategory } from "@/models/Category";
 import logo from "@/public/logo.png";
 
 export default function Header() {
-  // هوک‌ها همیشه بالا فراخوانی می‌شوند
   const themeContext = useContext(ThemeContext);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
@@ -123,7 +122,7 @@ export default function Header() {
       </button>
 
       <div
-        className={`fixed top-0 right-0 h-screen w-3/4 sm:w-2/3 backdrop-blur-md text-gray-200 flex flex-col items-start justify-center z-50 gap-6 p-6 transition-transform duration-500 ease-in-out shadow-lg rounded-l-3xl ${
+        className={`fixed top-0 right-0 h-screen w-full max-w-sm bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 flex flex-col items-start justify-center z-50 gap-6 p-6 transition-transform duration-300 ease-in-out shadow-lg ${
           isMenuOpen ? "translate-x-0" : "translate-x-full"
         }`}
       >
@@ -142,13 +141,13 @@ export default function Header() {
           صفحه اصلی
         </Link>
 
-        {/* دراپ‌داون موبایل جلو */}
-        <div className="w-full text-center relative">
+        {/* دراپ‌داون موبایل */}
+        <div className=" text-left relative">
           <button
             onClick={() => setIsDropdownOpen((prev) => !prev)}
-            className="flex items-center justify-center gap-2 text-xl font-semibold hover:text-accent transition-colors"
+            className="flex items-center justify-between w-full text-xl font-semibold hover:text-accent transition-colors"
           >
-            مقالات{" "}
+            مقالات
             <FaChevronDown
               size={16}
               className={`transform transition-transform duration-300 ${
@@ -157,7 +156,7 @@ export default function Header() {
             />
           </button>
           <div
-            className={`absolute top-0 left-1/2 -translate-x-1/2 mt-0 w-48 bg-white dark:bg-gray-800 shadow-lg rounded-md overflow-hidden transform transition-all duration-300 origin-top ${
+            className={` bg-white dark:bg-gray-900 shadow-md rounded-md overflow-hidden transform transition-all duration-300 origin-top ${
               isDropdownOpen ? "scale-y-100 opacity-100" : "scale-y-0 opacity-0"
             }`}
           >
@@ -204,7 +203,7 @@ export default function Header() {
 
         <button
           onClick={toggleTheme}
-          className="p-3 rounded-full bg-gray-700 text-yellow-300 hover:bg-gray-600 transition-colors"
+          className="p-3 rounded-full bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-yellow-300 hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors"
         >
           {theme === "dark" ? <FaSun size={24} /> : <FaMoon size={24} />}
         </button>

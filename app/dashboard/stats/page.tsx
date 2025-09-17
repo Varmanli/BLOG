@@ -7,10 +7,10 @@ import {
   CategoryScale,
   LinearScale,
   BarElement,
-  Title,
-  Tooltip,
   PointElement,
   LineElement,
+  Title,
+  Tooltip,
   Legend,
 } from "chart.js";
 import { FaChartBar, FaEye, FaBlog, FaTags } from "react-icons/fa";
@@ -89,7 +89,8 @@ export default function StatsPage() {
       {
         label: "تعداد بازدیدها",
         data: stats.monthlyViews,
-        backgroundColor: "#55008A",
+        backgroundColor: "#00FF99",
+        borderRadius: 6,
       },
     ],
   };
@@ -102,60 +103,149 @@ export default function StatsPage() {
         data: stats.monthlyBlogs,
         borderColor: "#FFAB00",
         backgroundColor: "rgba(255, 171, 0, 0.2)",
-        tension: 0.3,
+        tension: 0.4,
+        fill: true,
+        pointRadius: 5,
       },
     ],
   };
 
+  const chartOptions = {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: {
+      legend: {
+        labels: {
+          color: "var(--tw-text-opacity)", // هماهنگ با Tailwind
+        },
+      },
+      tooltip: {
+        mode: "index" as const,
+        intersect: false,
+      },
+      title: {
+        display: false,
+      },
+    },
+    scales: {
+      x: {
+        ticks: { color: "var(--tw-text-opacity)" },
+        grid: { color: "rgba(200,200,200,0.1)" },
+      },
+      y: {
+        ticks: { color: "var(--tw-text-opacity)" },
+        grid: { color: "rgba(200,200,200,0.1)" },
+      },
+    },
+  };
+
   return (
-    <main className="p-6 text-gray-900 dark:text-gray-100 min-h-screen">
+    <main className="p-6 min-h-screen text-gray-900 dark:text-gray-100">
       <h1 className="text-3xl font-bold mb-6 text-primary dark:text-accent">
         آمار و گزارش‌ها
       </h1>
 
       {/* کارت‌های آمار */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-        <div className="bg-white dark:bg-[#1e1e22] p-6 rounded-2xl shadow flex flex-col items-center transition-all hover:shadow-lg">
-          <FaEye className="text-5xl text-primary dark:text-accent mb-3" />
-          <h2 className="text-lg font-semibold mb-1">تعداد بازدیدها</h2>
-          <p className="text-3xl font-bold">
-            {stats.totalViews.toLocaleString()}
-          </p>
-        </div>
-
-        <div className="bg-white dark:bg-[#1e1e22] p-6 rounded-2xl shadow flex flex-col items-center transition-all hover:shadow-lg">
-          <FaBlog className="text-5xl text-primary dark:text-accent mb-3" />
-          <h2 className="text-lg font-semibold mb-1">تعداد بلاگ‌ها</h2>
-          <p className="text-3xl font-bold">{stats.totalBlogs}</p>
-        </div>
-
-        <div className="bg-white dark:bg-[#1e1e22] p-6 rounded-2xl shadow flex flex-col items-center transition-all hover:shadow-lg">
-          <FaTags className="text-5xl text-primary dark:text-accent mb-3" />
-          <h2 className="text-lg font-semibold mb-1">تعداد دسته‌بندی‌ها</h2>
-          <p className="text-3xl font-bold">{stats.totalCategories}</p>
-        </div>
-
-        <div className="bg-white dark:bg-[#1e1e22] p-6 rounded-2xl shadow flex flex-col items-center transition-all hover:shadow-lg">
-          <FaChartBar className="text-5xl text-primary dark:text-accent mb-3" />
-          <h2 className="text-lg font-semibold mb-1">نمودارهای تحلیلی</h2>
-          <p className="text-2xl font-bold">فعال</p>
-        </div>
+        {[
+          {
+            icon: (
+              <FaEye className="text-5xl text-primary dark:text-accent mb-3" />
+            ),
+            title: "تعداد بازدیدها",
+            value: stats.totalViews.toLocaleString(),
+          },
+          {
+            icon: (
+              <FaBlog className="text-5xl text-primary dark:text-accent mb-3" />
+            ),
+            title: "تعداد بلاگ‌ها",
+            value: stats.totalBlogs,
+          },
+          {
+            icon: (
+              <FaTags className="text-5xl text-primary dark:text-accent mb-3" />
+            ),
+            title: "تعداد دسته‌بندی‌ها",
+            value: stats.totalCategories,
+          },
+          {
+            icon: (
+              <FaChartBar className="text-5xl text-primary dark:text-accent mb-3" />
+            ),
+            title: "نمودارهای تحلیلی",
+            value: "فعال",
+          },
+        ].map((card, idx) => (
+          <div
+            key={idx}
+            className="bg-white dark:bg-[#1e1e22] p-6 rounded-2xl shadow flex flex-col items-center transition-all hover:shadow-lg"
+          >
+            {card.icon}
+            <h2 className="text-lg font-semibold mb-1">{card.title}</h2>
+            <p className="text-3xl font-bold">{card.value}</p>
+          </div>
+        ))}
       </div>
 
       {/* نمودارها */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-        <div className="bg-white dark:bg-[#1e1e22] p-6 rounded-2xl shadow transition-all hover:shadow-lg">
-          <h2 className="text-xl font-semibold mb-4 text-primary dark:text-accent">
+      <div className="flex flex-col gap-8">
+        {/* نمودار بازدیدها */}
+        <div className="bg-white dark:bg-[#1e1e22] p-14 rounded-2xl shadow transition-all hover:shadow-lg w-full h-[450px]">
+          <h2 className="text-xl font-semibold mb-4 text-gray-900 dark:text-gray-100">
             تعداد بازدیدها (ماهانه)
           </h2>
-          <Bar data={barData} />
+          <Bar
+            data={barData}
+            options={{
+              ...chartOptions,
+              plugins: {
+                ...chartOptions.plugins,
+                legend: {
+                  labels: { color: "#fff" }, // حالت روشن
+                },
+              },
+              scales: {
+                x: {
+                  ticks: { color: "#fff" },
+                  grid: { color: "rgba(200,200,200,0.2)" },
+                },
+                y: {
+                  ticks: { color: "#fff" },
+                  grid: { color: "rgba(200,200,200,0.2)" },
+                },
+              },
+            }}
+          />
         </div>
 
-        <div className="bg-white dark:bg-[#1e1e22] p-6 rounded-2xl shadow transition-all hover:shadow-lg">
-          <h2 className="text-xl font-semibold mb-4 text-primary dark:text-accent">
+        {/* نمودار بلاگ‌ها */}
+        <div className="bg-white dark:bg-[#1e1e22] p-14 rounded-2xl shadow transition-all hover:shadow-lg w-full h-[450px]">
+          <h2 className="text-xl font-semibold mb-4 text-gray-900 dark:text-gray-100">
             تعداد بلاگ‌ها (ماهانه)
           </h2>
-          <Line data={lineData} />
+          <Line
+            data={lineData}
+            options={{
+              ...chartOptions,
+              plugins: {
+                ...chartOptions.plugins,
+                legend: {
+                  labels: { color: "#fff" },
+                },
+              },
+              scales: {
+                x: {
+                  ticks: { color: "#fff" },
+                  grid: { color: "rgba(200,200,200,0.2)" },
+                },
+                y: {
+                  ticks: { color: "#fff" },
+                  grid: { color: "rgba(200,200,200,0.2)" },
+                },
+              },
+            }}
+          />
         </div>
       </div>
     </main>

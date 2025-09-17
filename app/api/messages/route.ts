@@ -30,3 +30,15 @@ export async function POST(req: Request) {
     );
   }
 }
+export async function GET() {
+  try {
+    await connectDB();
+    const messages = await Message.find().sort({ createdAt: -1 }).lean();
+    return NextResponse.json(messages, { status: 200 });
+  } catch (error: any) {
+    return NextResponse.json(
+      { error: error.message || "خطا در دریافت پیام‌ها" },
+      { status: 500 }
+    );
+  }
+}

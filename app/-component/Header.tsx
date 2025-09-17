@@ -156,7 +156,7 @@ export default function Header() {
             />
           </button>
           <div
-            className={` bg-white dark:bg-gray-900 shadow-md rounded-md overflow-hidden transform transition-all duration-300 origin-top ${
+            className={` bg-white dark:bg-gray-900 shadow-md rounded-md overflow-hidden transform transition-all duration-300 origin-top text-right ${
               isDropdownOpen ? "scale-y-100 opacity-100" : "scale-y-0 opacity-0"
             }`}
           >
@@ -166,7 +166,7 @@ export default function Header() {
                 setIsMenuOpen(false);
                 setIsDropdownOpen(false);
               }}
-              className="block px-2  text-sm hover:text-accent transition-colors"
+              className="block py-2  text-sm hover:text-accent transition-colors"
             >
               همه مقالات
             </Link>
@@ -178,7 +178,7 @@ export default function Header() {
                   setIsMenuOpen(false);
                   setIsDropdownOpen(false);
                 }}
-                className="block px-4 py-2 text-sm hover:text-accent transition-colors"
+                className="block py-2 text-sm hover:text-accent transition-colors"
               >
                 {cat.name}
               </Link>

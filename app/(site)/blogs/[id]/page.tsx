@@ -7,7 +7,7 @@ interface Blog {
   title: string;
   content: string;
   coverImage?: string;
-  category?: string; // اینجا آیدی دسته‌بندی میاد
+  category?: string;
   createdAt?: string;
 }
 
@@ -55,7 +55,7 @@ export default async function BlogPage({ params }: { params: { id: string } }) {
   }
 
   return (
-    <div className="max-w-5xl mx-auto py-12 px-6 md:px-10">
+    <div className="md:w-[60%] mx-auto py-12 px-6 md:px-10">
       {/* عکس بالای صفحه */}
       {blog.coverImage && (
         <div className="relative w-full mt-[-50px] h-64 md:h-80 overflow-hidden rounded-2xl shadow-lg mb-6 z-10">
@@ -65,31 +65,11 @@ export default async function BlogPage({ params }: { params: { id: string } }) {
             className="w-full h-full object-cover transition-transform duration-500 hover:scale-105"
             fill
           />
-
-          {/* گرادیانت تیره پایین عکس */}
-          <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent"></div>
-
-          {/* اطلاعات دسته‌بندی، تاریخ و نویسنده روی عکس */}
-          <div className="absolute bottom-4 left-0 right-0 px-6 flex text-[10px] md:text-sm  items-center  gap-2 md:gap-8 text-white">
-            {categoryName && (
-              <span className="px-3 py-1 rounded-full bg-indigo-600/80 font-medium">
-                {categoryName}
-              </span>
-            )}
-            {blog.createdAt && (
-              <span>
-                {new Date(blog.createdAt).toLocaleDateString("fa-IR")}
-              </span>
-            )}
-            <span>
-              نویسنده: <span className="font-semibold">امیرحسین ورمانلی</span>
-            </span>
-          </div>
         </div>
       )}
 
       {/* عنوان */}
-      <h1 className="text-4xl md:text-5xl font-extrabold text-gray-900 dark:text-gray-100 mb-8 mt-4">
+      <h1 className="text-3xl md:text-5xl font-bold text-center text-gray-900 dark:text-gray-100 mb-8 mt-4">
         {blog.title}
       </h1>
 
@@ -118,6 +98,25 @@ export default async function BlogPage({ params }: { params: { id: string } }) {
   "
       >
         {parse(blog.content)}
+      </div>
+      {/* اطلاعات دسته‌بندی، تاریخ و نویسنده روی عکس */}
+      <div
+        className="w-full flex justify-between bg-accent items-center gap-2 md:gap-6 p-1 mt-14 md:p-1
+                rounded-xl shadow-lg backdrop-blur-sm text-[10px] md:text-sm
+                "
+      >
+        {blog.createdAt && (
+          <span className="bg-white/10 px-2 py-1 rounded-lg">
+            تاریخ انتشار:
+            <span className="font-semibold">
+              {new Date(blog.createdAt).toLocaleDateString("fa-IR")}
+            </span>
+          </span>
+        )}
+
+        <span className="bg-white/10 px-2 py-1 rounded-lg flex items-center">
+          نویسنده: <span className="font-semibold mr-1">امیرحسین ورمانلی</span>
+        </span>
       </div>
     </div>
   );

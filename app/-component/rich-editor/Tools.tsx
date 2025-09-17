@@ -176,7 +176,7 @@ const Tools: FC<Props> = ({ editor, onImageSelection }) => {
     <div className="flex items-start space-x-1">
       <select
         value={getSelectedHeading()}
-        className="p-2 bg-accent text-black"
+        className="p-2 bg-[#2A2A34] text-white"
         onChange={handleHeadingSelection}
       >
         {headingOptions.map((item) => {
@@ -184,7 +184,7 @@ const Tools: FC<Props> = ({ editor, onImageSelection }) => {
             <option
               key={item.task}
               value={item.task}
-              className="bg-accent text-black"
+              className="bg-[#2A2A34] text-white"
             >
               {item.value}
             </option>

@@ -43,7 +43,7 @@ const RichEditor: FC<Props> = ({ value = "", onChange }) => {
     editorProps: {
       attributes: {
         class:
-          "prose prose-sm sm:prose-base lg:prose-lg xl:prose-2xl outline-none bg-slate-600 p-4 rounded-md text-white w-full max-w-5xl",
+          "prose prose-sm sm:prose-base lg:prose-lg xl:prose-2xl outline-none bg-gray-50 dark:bg-[#1e1e22] p-6 rounded-2xl text-gray-900 dark:text-gray-100 w-full max-w-5xl shadow-md transition-all",
       },
     },
     onUpdate: ({ editor }) => {
@@ -52,7 +52,6 @@ const RichEditor: FC<Props> = ({ value = "", onChange }) => {
     },
   });
 
-  // 👇 این بخش مهمه برای sync شدن مقدار بیرونی
   useEffect(() => {
     if (editor && value !== editor.getHTML()) {
       editor.commands.setContent(value || "");
@@ -63,15 +62,15 @@ const RichEditor: FC<Props> = ({ value = "", onChange }) => {
     editor
       ?.chain()
       .focus()
-      .setImage({ src: image, alt: "this is an image" })
+      .setImage({ src: image, alt: "تصویر انتخاب‌شده" })
       .run();
   };
 
   return (
     <>
-      <div className="flex flex-col space-y-6 h-screen ">
+      <div className="flex flex-col h-screen space-y-6">
         {/* Toolbar */}
-        <div className="fixed top-0 bg-accent z-50 border-b ">
+        <div className="fixed top-0 left-1/3 transform -translate-x-1/2 z-50 bg-white dark:bg-[#2a2a34] border-b border-gray-200 dark:border-gray-700 rounded-b-2xl shadow-lg w-fit max-w-5xl px-4 py-2 flex justify-between items-center transition-all">
           <Tools
             editor={editor}
             onImageSelection={() => setShowImageGallery(true)}
@@ -79,10 +78,10 @@ const RichEditor: FC<Props> = ({ value = "", onChange }) => {
         </div>
 
         {/* Editor */}
-        <div className="flex-1">
+        <div className="flex-1 mt-20">
           <EditorContent
             editor={editor}
-            className="min-h-[600px] w-full max-w-5xl mx-auto bg-slate-600 prose prose-sm sm:prose-base lg:prose-lg xl:prose-2xl outline-none p-6 rounded-lg shadow"
+            className="min-h-[600px] w-full max-w-5xl mx-auto bg-white dark:bg-[#1f1f25] prose prose-sm sm:prose-base lg:prose-lg xl:prose-2xl outline-none p-6 rounded-2xl shadow-lg transition-all"
           />
         </div>
       </div>

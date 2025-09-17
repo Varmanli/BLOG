@@ -133,3 +133,16 @@ body::-webkit-scrollbar-thumb {
   --snippet-color: rgba(34, 197, 94, 0.7);
   --symbol-gradient: linear-gradient(90deg, #f0f, #0ff, #a0f);
 }
+
+.prose pre {
+  background-color: #1e1e2e; /* پس‌زمینه VS Code */
+  color: #f8f8f2;
+  padding: 1rem;
+  border-radius: 0.75rem;
+  overflow-x: auto;
+  font-family: "Fira Code", monospace;
+  font-size: 0.9rem;
+  line-height: 1.6;
+  text-align: left; /* 👈 چپ‌چین کردن */
+  direction: ltr; /* 👈 خیلی مهم برای کد */
+}

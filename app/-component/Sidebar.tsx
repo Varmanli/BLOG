@@ -20,75 +20,64 @@ function Sidebar() {
     setIsOpen((prev) => !prev);
   };
 
+  const linkClasses =
+    "flex items-center gap-3 px-4 py-3 rounded-lg transition-all hover:bg-accent/20 dark:hover:bg-[#00FF9920] hover:shadow-lg";
+
   return (
     <div className="flex">
       {/* دکمه منوی همبرگری */}
       <button
         onClick={toggleSidebar}
-        className="p-4 text-primary dark:text-accent md:hidden"
+        className="p-4 text-primary dark:text-accent md:hidden focus:outline-none focus:ring-2 focus:ring-accent rounded-lg"
       >
         {isOpen ? <FaTimes size={24} /> : <FaBars size={24} />}
       </button>
 
       {/* سایدبار */}
       <aside
-        className={`fixed md:static top-0 left-0 h-full md:h-auto w-64 p-5 bg-gray-100 dark:bg-background text-gray-700 dark:text-gray-300 transition-transform duration-500 md:translate-x-0 ${
-          isOpen ? "translate-x-0" : "-translate-x-full"
-        }`}
+        className={`
+          fixed md:static top-0 left-0 h-full w-64 p-6
+          bg-white dark:bg-[#1e1e22] text-gray-700 dark:text-gray-300
+          shadow-lg md:shadow-none rounded-tr-2xl rounded-br-2xl
+          transition-transform duration-500 ease-in-out
+          ${isOpen ? "translate-x-0" : "-translate-x-full"} md:translate-x-0
+        `}
       >
         {/* عنوان داشبورد */}
-        <h1 className="text-2xl font-bold mb-6 text-primary dark:text-accent text-center">
+        <h1 className="text-2xl font-bold mb-8 text-center text-accent dark:text-[#00FF99]">
           داشبورد مدیریت
         </h1>
 
         {/* لینک‌ها */}
-        <ul className="space-y-10">
+        <ul className="space-y-3">
           <li>
-            <Link
-              href="/dashboard"
-              className="flex items-center gap-3 hover:text-primary dark:hover:text-accent transition"
-            >
-              <FaHome className="text-accent text-2xl" /> صفحه اصلی
+            <Link href="/dashboard" className={linkClasses}>
+              <FaHome className="text-accent text-xl" /> صفحه اصلی
             </Link>
           </li>
           <li>
-            <Link
-              href="/dashboard/posts"
-              className="flex items-center gap-3 hover:text-primary dark:hover:text-accent transition"
-            >
-              <FaList className="text-accent text-2xl" /> مدیریت بلاگ‌ها
+            <Link href="/dashboard/posts" className={linkClasses}>
+              <FaList className="text-accent text-xl" /> مدیریت بلاگ‌ها
             </Link>
           </li>
           <li>
-            <Link
-              href="/dashboard/posts/create"
-              className="flex items-center gap-3 hover:text-primary dark:hover:text-accent transition"
-            >
-              <FaPlus className="text-accent text-2xl" /> افزودن بلاگ جدید
+            <Link href="/dashboard/posts/create" className={linkClasses}>
+              <FaPlus className="text-accent text-xl" /> افزودن بلاگ جدید
             </Link>
           </li>
           <li>
-            <Link
-              href="/dashboard/categories"
-              className="flex items-center gap-3 hover:text-primary dark:hover:text-accent transition"
-            >
-              <FaTags className="text-accent text-2xl" /> مدیریت دسته‌بندی‌ها
+            <Link href="/dashboard/categories" className={linkClasses}>
+              <FaTags className="text-accent text-xl" /> مدیریت دسته‌بندی‌ها
             </Link>
           </li>
           <li>
-            <Link
-              href="/dashboard/message"
-              className="flex items-center gap-3 hover:text-primary dark:hover:text-accent transition"
-            >
-              <MdOutlineMessage className="text-accent text-2xl" /> پیغام ها
+            <Link href="/dashboard/message" className={linkClasses}>
+              <MdOutlineMessage className="text-accent text-xl" /> پیغام‌ها
             </Link>
           </li>
           <li>
-            <Link
-              href="/dashboard/stats"
-              className="flex items-center gap-3 hover:text-primary dark:hover:text-accent transition"
-            >
-              <FaChartBar className="text-accent text-2xl" /> آمار و گزارش‌ها
+            <Link href="/dashboard/stats" className={linkClasses}>
+              <FaChartBar className="text-accent text-xl" /> آمار و گزارش‌ها
             </Link>
           </li>
         </ul>

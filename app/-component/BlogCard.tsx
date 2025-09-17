@@ -10,17 +10,6 @@ interface BlogCardProps {
 }
 
 export default function BlogCard({ blog }: BlogCardProps) {
-  // تابع هندل کلیک
-  const handleBlogClick = async () => {
-    try {
-      await fetch(`/api/blogs/${blog._id}`, {
-        method: "PATCH",
-      });
-    } catch (error) {
-      console.error("خطا در افزایش ویو:", error);
-    }
-  };
-
   return (
     <motion.div
       whileHover={{ scale: 1.05 }}
@@ -53,7 +42,6 @@ export default function BlogCard({ blog }: BlogCardProps) {
         <div className="flex justify-end">
           <Link
             href={`/blogs/${blog._id}`}
-            onClick={handleBlogClick} 
             className="px-4 py-2 rounded-lg bg-gradient-to-r from-pink-500 to-indigo-500 text-white text-sm font-semibold shadow hover:opacity-90 transition mt-3"
           >
             مطالعه مقاله

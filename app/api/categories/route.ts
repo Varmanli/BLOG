@@ -1,14 +1,25 @@
 import { NextRequest, NextResponse } from "next/server";
 import { connectDB } from "@/lib/db";
 import Category from "@/models/Category";
+import Blog from "@/models/Blog";
 
 // GET دسته‌بندی‌ها
 export async function GET() {
   try {
-    await connectDB(); // اتصال دیتابیس اینجا زده میشه
-    const categories = await Category.find().sort({ createdAt: -1 });
+    await connectDB();
 
-    return NextResponse.json(categories, { status: 200 });
+    // همه دسته‌ها
+    const categories = await Category.find().sort({ createdAt: -1 }).lean();
+
+    // شمارش بلاگ‌ها برای هر دسته
+    const withCounts = await Promise.all(
+      categories.map(async (cat) => {
+        const count = await Blog.countDocuments({ category: cat._id });
+        return { ...cat, blogCount: count };
+      })
+    );
+
+    return NextResponse.json(withCounts, { status: 200 });
   } catch (error: any) {
     console.error("GET /api/categories error:", error);
     return NextResponse.json(
@@ -17,7 +28,6 @@ export async function GET() {
     );
   }
 }
-
 // POST ایجاد دسته‌بندی جدید
 export async function POST(req: NextRequest) {
   try {

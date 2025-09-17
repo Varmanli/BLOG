@@ -2,82 +2,77 @@
 
 import { useEffect, useState } from "react";
 import { toast } from "react-hot-toast";
-import { Line } from "react-chartjs-2";
-import {
-  Chart as ChartJS,
-  CategoryScale,
-  LinearScale,
-  PointElement,
-  LineElement,
-  Title,
-  Tooltip,
-  Legend,
-} from "chart.js";
-
-ChartJS.register(
-  CategoryScale,
-  LinearScale,
-  PointElement,
-  LineElement,
-  Title,
-  Tooltip,
-  Legend
-);
 
 interface Stats {
   totalViews: number;
   totalBlogs: number;
   totalCategories: number;
-  monthlyViews: number[];
-  monthlyBlogs: number[];
 }
 
 export default function DashboardPage() {
   const [stats, setStats] = useState<Stats | null>(null);
+  const [time, setTime] = useState(new Date());
 
   useEffect(() => {
     fetch("/api/stats")
       .then((res) => res.json())
       .then((data) => setStats(data))
-      .catch((err) => toast.error("خطا در دریافت آمار"));
-  }, []);
+      .catch(() => toast.error("خطا در دریافت آمار"));
 
-  const today = new Date().toLocaleDateString("fa-IR", {
-    weekday: "long",
-    day: "numeric",
-    month: "long",
-    year: "numeric",
-  });
+    const interval = setInterval(() => setTime(new Date()), 1000);
+    return () => clearInterval(interval);
+  }, []);
 
   if (!stats)
     return (
-      <p className="text-gray-700 dark:text-gray-300">در حال بارگذاری...</p>
+      <p className="text-gray-700 dark:text-gray-300 text-center mt-10">
+        در حال بارگذاری...
+      </p>
     );
+
+  const dateStr = time.toLocaleDateString("fa-IR", {
+    month: "long",
+    year: "numeric",
+    weekday: "long",
+    day: "numeric",
+  });
+
+  const timeStr = time.toLocaleTimeString("fa-IR");
 
   return (
     <div className="flex min-h-screen transition-all">
       <main className="flex-1 p-6 md:p-10">
-        <div className="flex justify-between items-center mb-8">
-          <h1 className="text-3xl md:text-4xl font-extrabold text-accent dark:text-[#00FF99]">
+        {/* هدر */}
+        <div className="flex flex-col md:flex-row justify-between items-center mb-8 gap-4 bg-white dark:bg-[#1e1e22] p-6 rounded-2xl shadow-md hover:shadow-lg transition-all">
+          <h1 className="text-4xl md:text-5xl font-extrabold text-accent dark:text-[#00FF99]">
             داشبورد مدیریت
           </h1>
-          <p className="text-gray-600 dark:text-gray-400">{today}</p>
-        </div>
 
-        <div className="flex justify-end mb-6">
-          <a
-            href="/"
-            target="_blank"
-            className="bg-accent text-black font-semibold px-4 py-2 rounded-lg hover:bg-accent/80 transition-shadow shadow-md"
-          >
-            رفتن به سایت
-          </a>
+          <div className="flex flex-col md:flex-row items-center gap-4 text-gray-600 dark:text-gray-400 text-lg">
+            <div className="text-right">
+              <div className="font-medium">{dateStr}</div>
+              <div className="font-semibold text-accent dark:text-[#00FF99]">
+                {timeStr}
+              </div>
+            </div>
+
+            {/* دکمه رفتن به سایت */}
+            <div>
+              <a
+                href="/"
+                target="_blank"
+                className="bg-accent dark:bg-[#00FF99] text-black dark:text-gray-900 font-semibold px-6 py-3 rounded-lg hover:bg-accent/90 hover:shadow-xl transition-all shadow-md"
+              >
+                رفتن به سایت
+              </a>
+            </div>
+          </div>
         </div>
 
         {/* کارت‌ها */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-10">
-          <div className="bg-white dark:bg-[#1E1E22] p-6 rounded-2xl shadow-md hover:shadow-lg transition-all">
-            <h2 className="text-lg md:text-xl font-semibold text-gray-700 dark:text-gray-300">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="bg-white dark:bg-[#1E1E22] p-6 rounded-2xl shadow-md hover:shadow-lg transition-all text-center">
+            <h2 className="text-lg md:text-xl font-semibold text-gray-700 dark:text-gray-300 mb-2">
               تعداد کل وبلاگ‌ها
             </h2>
             <p className="text-3xl md:text-4xl font-bold text-accent dark:text-[#00FF99]">
@@ -85,8 +80,8 @@ export default function DashboardPage() {
             </p>
           </div>
 
-          <div className="bg-white dark:bg-[#1E1E22] p-6 rounded-2xl shadow-md hover:shadow-lg transition-all">
-            <h2 className="text-lg md:text-xl font-semibold text-gray-700 dark:text-gray-300">
+          <div className="bg-white dark:bg-[#1E1E22] p-6 rounded-2xl shadow-md hover:shadow-lg transition-all text-center">
+            <h2 className="text-lg md:text-xl font-semibold text-gray-700 dark:text-gray-300 mb-2">
               تعداد بازدیدکنندگان
             </h2>
             <p className="text-3xl md:text-4xl font-bold text-accent dark:text-[#00FF99]">
@@ -94,8 +89,8 @@ export default function DashboardPage() {
             </p>
           </div>
 
-          <div className="bg-white dark:bg-[#1E1E22] p-6 rounded-2xl shadow-md hover:shadow-lg transition-all">
-            <h2 className="text-lg md:text-xl font-semibold text-gray-700 dark:text-gray-300">
+          <div className="bg-white dark:bg-[#1E1E22] p-6 rounded-2xl shadow-md hover:shadow-lg transition-all text-center">
+            <h2 className="text-lg md:text-xl font-semibold text-gray-700 dark:text-gray-300 mb-2">
               دسته‌بندی‌ها
             </h2>
             <p className="text-3xl md:text-4xl font-bold text-accent dark:text-[#00FF99]">

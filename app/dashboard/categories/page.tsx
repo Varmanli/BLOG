@@ -1,14 +1,27 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { FaEdit, FaTrashAlt, FaCheck, FaTimes, FaPlus } from "react-icons/fa";
+import {
+  FaEdit,
+  FaTrashAlt,
+  FaCheck,
+  FaTimes,
+  FaPlus,
+  FaSort,
+  FaSortUp,
+  FaSortDown,
+} from "react-icons/fa";
 import toast, { Toaster } from "react-hot-toast";
 
 interface Category {
   _id: string;
   name: string;
   slug: string;
+  blogCount?: number;
 }
+
+type SortKey = "name" | "blogCount";
+type SortOrder = "asc" | "desc";
 
 export default function ManageCategoriesPage() {
   const [categories, setCategories] = useState<Category[]>([]);
@@ -18,6 +31,8 @@ export default function ManageCategoriesPage() {
   const [editingId, setEditingId] = useState<string | null>(null);
   const [editingName, setEditingName] = useState("");
   const [modalCategoryId, setModalCategoryId] = useState<string | null>(null);
+  const [sortKey, setSortKey] = useState<SortKey>("name");
+  const [sortOrder, setSortOrder] = useState<SortOrder>("asc");
 
   const fetchCategories = async () => {
     try {
@@ -65,8 +80,34 @@ export default function ManageCategoriesPage() {
     } catch {
       toast.error("خطا در حذف دسته‌بندی");
     } finally {
-      setModalCategoryId(null); // بستن مودال بعد از عملیات
+      setModalCategoryId(null);
     }
+  };
+
+  const sortedCategories = [...categories].sort((a, b) => {
+    const aValue = a[sortKey] || "";
+    const bValue = b[sortKey] || "";
+    if (aValue < bValue) return sortOrder === "asc" ? -1 : 1;
+    if (aValue > bValue) return sortOrder === "asc" ? 1 : -1;
+    return 0;
+  });
+
+  const toggleSort = (key: SortKey) => {
+    if (sortKey === key) {
+      setSortOrder(sortOrder === "asc" ? "desc" : "asc");
+    } else {
+      setSortKey(key);
+      setSortOrder("asc");
+    }
+  };
+
+  const renderSortIcon = (key: SortKey) => {
+    if (sortKey !== key) return <FaSort className="inline ml-1" />;
+    return sortOrder === "asc" ? (
+      <FaSortUp className="inline ml-1" />
+    ) : (
+      <FaSortDown className="inline ml-1" />
+    );
   };
 
   if (loading)
@@ -77,7 +118,7 @@ export default function ManageCategoriesPage() {
     );
 
   return (
-    <main className="p-6  text-gray-900 dark:text-gray-100 min-h-screen relative">
+    <main className="p-6 text-gray-900 dark:text-gray-100 min-h-screen relative">
       <Toaster position="top-right" />
 
       <h1 className="text-3xl font-bold mb-6 text-primary dark:text-[#00FF99]">
@@ -95,28 +136,39 @@ export default function ManageCategoriesPage() {
         />
         <button
           onClick={handleAddCategory}
-          className="flex items-center gap-2 px-4 py-3 bg-accent dark:bg-[#00FF99] text-white rounded-lg hover:opacity-90 transition-all"
+          className="flex items-center gap-2 px-4 py-3 bg-accent dark:bg-[#00FF99] text-black rounded-lg hover:opacity-90 transition-all"
         >
           <FaPlus /> افزودن
         </button>
       </div>
 
-      {/* لیست دسته‌بندی‌ها */}
+      {/* جدول دسته‌بندی‌ها */}
       {error && <p className="text-red-600 dark:text-red-400 mb-4">{error}</p>}
 
-      <div className="overflow-x-auto">
-        <table className="w-full bg-white dark:bg-[#1e1e22] shadow-md rounded-xl">
+      <div className="overflow-x-auto rounded-xl shadow-lg">
+        <table className="w-full border-collapse bg-white dark:bg-[#1e1e22] text-sm">
           <thead>
-            <tr className="bg-gray-200 dark:bg-[#1c1c22] text-gray-700 dark:text-gray-300">
-              <th className="p-3 text-right">نام دسته‌بندی</th>
+            <tr className="bg-gray-100 dark:bg-[#2a2a2e] text-gray-700 dark:text-gray-300">
+              <th
+                className="p-3 text-right cursor-pointer"
+                onClick={() => toggleSort("name")}
+              >
+                نام دسته‌بندی {renderSortIcon("name")}
+              </th>
+              <th
+                className="p-3 text-center cursor-pointer"
+                onClick={() => toggleSort("blogCount")}
+              >
+                تعداد وبلاگ {renderSortIcon("blogCount")}
+              </th>
               <th className="p-3 text-center">عملیات</th>
             </tr>
           </thead>
           <tbody>
-            {categories.map((category) => (
+            {sortedCategories.map((category) => (
               <tr
                 key={category._id}
-                className="border-b hover:bg-gray-100 dark:hover:bg-[#2a2a2e] transition-all"
+                className="border-b border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-[#2f2f35] transition"
               >
                 <td className="p-3 text-right">
                   {editingId === category._id ? (
@@ -130,6 +182,7 @@ export default function ManageCategoriesPage() {
                     category.name
                   )}
                 </td>
+                <td className="p-3 text-center">{category.blogCount ?? 0}</td>
                 <td className="p-3 flex justify-center gap-4">
                   {editingId === category._id ? (
                     <>
@@ -164,9 +217,7 @@ export default function ManageCategoriesPage() {
                   ) : (
                     <>
                       <button
-                        onClick={() => {
-                          setModalCategoryId(category._id);
-                        }}
+                        onClick={() => setModalCategoryId(category._id)}
                         className="text-red-500 hover:text-red-700"
                       >
                         <FaTrashAlt size={18} />
@@ -188,7 +239,7 @@ export default function ManageCategoriesPage() {
             {categories.length === 0 && (
               <tr>
                 <td
-                  colSpan={2}
+                  colSpan={3}
                   className="p-3 text-center text-gray-500 dark:text-gray-400"
                 >
                   هیچ دسته‌بندی‌ای موجود نیست.

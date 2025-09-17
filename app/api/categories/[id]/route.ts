@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { connectDB } from "@/lib/db";
 import Category from "@/models/Category";
+import Blog from "@/models/Blog";
 
 connectDB();
 
@@ -9,13 +10,17 @@ export async function GET(
   { params }: { params: { id: string } }
 ) {
   try {
-    const category = await Category.findById(params.id);
+    const category = await Category.findById(params.id).lean();
     if (!category)
       return NextResponse.json(
         { message: "دسته‌بندی پیدا نشد" },
         { status: 404 }
       );
-    return NextResponse.json(category);
+
+    // شمارش بلاگ‌های مربوط به همین دسته
+    const blogCount = await Blog.countDocuments({ category: params.id });
+
+    return NextResponse.json({ ...category, blogCount });
   } catch (error) {
     return NextResponse.json(
       { message: "خطا در دریافت دسته‌بندی", error },

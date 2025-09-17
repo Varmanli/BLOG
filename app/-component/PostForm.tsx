@@ -170,11 +170,14 @@ export default function PostForm({ post, mode }: PostFormProps) {
 
   return (
     <ImageProvider>
-      <form onSubmit={handleSubmit} className="max-w-5xl mx-auto p-6 space-y-6">
+      <form
+        onSubmit={handleSubmit}
+        className="max-w-5xl bg-[#1E1E22] rounded-2xl mx-auto p-10 space-y-6"
+      >
         {/* Title */}
         <div>
-          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-            عنوان پست *
+          <label className="block  font-medium  text-gray-700 dark:text-gray-300 mb-2">
+            عنوان پست
           </label>
           <input
             type="text"
@@ -196,8 +199,8 @@ export default function PostForm({ post, mode }: PostFormProps) {
 
         {/* Category */}
         <div>
-          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-            دسته‌بندی *
+          <label className="block font-medium text-gray-700 dark:text-gray-300 mb-2">
+            دسته‌بندی
           </label>
           <select
             value={selectedCategory}
@@ -225,7 +228,7 @@ export default function PostForm({ post, mode }: PostFormProps) {
 
         {/* Cover Image */}
         <div>
-          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+          <label className="block font-medium text-gray-700 dark:text-gray-300 mb-2">
             تصویر کاور
           </label>
           <div className="mb-4">
@@ -290,8 +293,8 @@ export default function PostForm({ post, mode }: PostFormProps) {
         {/* Content */}
         <div className="mb-4">
           <div className="flex justify-between items-center mb-2">
-            <label className="text-sm font-medium text-gray-700 dark:text-gray-300">
-              محتوای پست *
+            <label className="font-medium text-gray-700 dark:text-gray-300">
+              محتوای پست
             </label>
 
             <div className="flex gap-2">
@@ -306,10 +309,10 @@ export default function PostForm({ post, mode }: PostFormProps) {
               <button
                 type="submit"
                 disabled={isLoading}
-                className={`px-4 py-2 rounded-lg text-white font-medium transition-colors ${
+                className={`px-4 py-2 rounded-lg font-medium transition-colors ${
                   isLoading
-                    ? "bg-gray-400 cursor-not-allowed"
-                    : "bg-blue-600 hover:bg-blue-700"
+                    ? "bg-gray-400 text-white cursor-not-allowed"
+                    : "bg-accent text-black hover:bg-accent/80"
                 }`}
               >
                 {isLoading

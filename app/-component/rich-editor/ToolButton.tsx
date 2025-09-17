@@ -5,7 +5,7 @@ interface Props {
   children: ReactNode;
   active?: boolean;
   onClick?(): void;
-  type?: "button" | "submit" | "reset"; // اضافه کردن نوع دکمه
+  type?: "button" | "submit" | "reset"; 
 }
 
 const ToolButton: FC<Props> = ({
@@ -20,7 +20,7 @@ const ToolButton: FC<Props> = ({
       onClick={onClick}
       className={clsx(
         "p-2 rounded transition-colors",
-        active ? "bg-black text-white" : "text-black"
+        active ? "text-accent" : "text-white"
       )}
     >
       {children}

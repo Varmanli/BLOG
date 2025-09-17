@@ -135,14 +135,14 @@ body::-webkit-scrollbar-thumb {
 }
 
 .prose pre {
-  background-color: #1e1e2e; /* پس‌زمینه VS Code */
-  color: #f8f8f2;
+  background-color: #1e1e2e;
+  color: #9284c6;
   padding: 1rem;
   border-radius: 0.75rem;
   overflow-x: auto;
-  font-family: "Fira Code", monospace;
+  font-weight: bold;
   font-size: 0.9rem;
   line-height: 1.6;
-  text-align: left; /* 👈 چپ‌چین کردن */
-  direction: ltr; /* 👈 خیلی مهم برای کد */
+  text-align: left;
+  direction: ltr;
 }

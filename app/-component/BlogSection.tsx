@@ -96,7 +96,9 @@ export default function BlogSection({
   return (
     <section
       id="blog"
-      className={`relative z-20 ${hideTabs ? "pb-16" : "py-16"}`}
+      className={`relative z-20 ${
+        hideTabs ? "pb-16" : "py-16"
+      } overflow-x-hidden`}
     >
       <h1
         className={`text-4xl md:text-5xl font-extrabold bg-gradient-to-r from-pink-500 via-purple-500 to-indigo-600 text-transparent bg-clip-text animate-fadeIn mb-8 text-center ${

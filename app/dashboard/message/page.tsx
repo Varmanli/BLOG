@@ -1,14 +1,51 @@
-import { connectDB } from "@/lib/db";
-import Message from "@/models/Message";
-import Link from "next/link";
+"use client";
 
-async function getMessages() {
-  await connectDB();
-  return await Message.find().sort({ createdAt: -1 }).lean();
+import { useState } from "react";
+import { toast } from "react-hot-toast";
+
+interface Message {
+  _id: string;
+  name: string;
+  email: string;
+  message: string;
+  createdAt: string;
 }
 
-export default async function MessagesDashboard() {
-  const messages = await getMessages();
+interface Props {
+  messages: Message[];
+}
+
+export default function MessagesDashboard({
+  messages: initialMessages,
+}: {
+  messages: Message[];
+}) {
+  const [messages, setMessages] = useState(initialMessages);
+  const [loadingIds, setLoadingIds] = useState<string[]>([]);
+
+  const handleDelete = async (id: string) => {
+    if (!confirm("آیا مطمئن هستید می‌خواهید این پیام را حذف کنید؟")) return;
+
+    setLoadingIds((prev) => [...prev, id]);
+
+    try {
+      const res = await fetch(`/api/messages/${id}`, { method: "DELETE" });
+      const resData = await res.json();
+
+      if (!res.ok) {
+        toast.error(resData.error || "حذف پیام موفقیت‌آمیز نبود.");
+        return;
+      }
+
+      setMessages((prev) => prev.filter((msg) => msg._id !== id));
+      toast.success(resData.message);
+    } catch (err) {
+      console.log(err);
+      toast.error("خطا در حذف پیام");
+    } finally {
+      setLoadingIds((prev) => prev.filter((i) => i !== id));
+    }
+  };
 
   if (!messages || messages.length === 0) {
     return (
@@ -20,8 +57,8 @@ export default async function MessagesDashboard() {
     <div className="flex flex-col gap-4">
       {messages.map((msg) => (
         <div
-          key={String(msg._id)}
-          className="border rounded-lg p-4 shadow hover:shadow-md transition flex justify-between items-start gap-4"
+          key={msg._id}
+          className="border rounded-lg p-6 shadow hover:shadow-lg transition flex justify-between items-start gap-4 bg-gray-50 dark:bg-gray-800"
         >
           <div className="flex-1">
             <p className="font-semibold text-gray-800 dark:text-gray-200">
@@ -35,17 +72,17 @@ export default async function MessagesDashboard() {
               {new Date(msg.createdAt).toLocaleString()}
             </p>
           </div>
-          <form
-            method="post"
-            action={`/api/messages/${msg._id}?_method=DELETE`}
+          <button
+            onClick={() => handleDelete(msg._id)}
+            disabled={loadingIds.includes(msg._id)}
+            className={`bg-red-500 hover:bg-red-600 text-white rounded px-4 py-2 transition flex items-center justify-center ${
+              loadingIds.includes(msg._id)
+                ? "opacity-50 cursor-not-allowed"
+                : ""
+            }`}
           >
-            <button
-              type="submit"
-              className="bg-red-500 hover:bg-red-600 text-white rounded px-4 py-2 transition"
-            >
-              حذف
-            </button>
-          </form>
+            {loadingIds.includes(msg._id) ? "در حال حذف..." : "حذف"}
+          </button>
         </div>
       ))}
     </div>

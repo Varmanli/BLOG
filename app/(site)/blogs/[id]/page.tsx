@@ -69,7 +69,7 @@ export default async function BlogPage({ params }: { params: { id: string } }) {
       )}
 
       {/* عنوان */}
-      <h1 className="text-3xl md:text-5xl font-bold text-center text-gray-900 dark:text-gray-100 mb-8 mt-4">
+      <h1 className="text-3xl md:text-5xl font-bold text-center text-gray-900 dark:text-gray-100 my-20">
         {blog.title}
       </h1>
 

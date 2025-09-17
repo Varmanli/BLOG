@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { toast } from "react-hot-toast";
 
 interface Message {
@@ -11,17 +11,18 @@ interface Message {
   createdAt: string;
 }
 
-interface Props {
-  messages: Message[];
-}
-
-export default function MessagesDashboard({
-  messages: initialMessages,
-}: {
-  messages: Message[];
-}) {
-  const [messages, setMessages] = useState(initialMessages);
+export default function MessagesDashboard() {
+  const [messages, setMessages] = useState<Message[]>([]);
   const [loadingIds, setLoadingIds] = useState<string[]>([]);
+  const [loadingMessages, setLoadingMessages] = useState(true);
+
+  useEffect(() => {
+    fetch("/api/messages")
+      .then((res) => res.json())
+      .then((data) => setMessages(data))
+      .catch((err) => toast.error("خطا در دریافت پیام‌ها"))
+      .finally(() => setLoadingMessages(false));
+  }, []);
 
   const handleDelete = async (id: string) => {
     if (!confirm("آیا مطمئن هستید می‌خواهید این پیام را حذف کنید؟")) return;
@@ -39,19 +40,22 @@ export default function MessagesDashboard({
 
       setMessages((prev) => prev.filter((msg) => msg._id !== id));
       toast.success(resData.message);
-    } catch (err) {
-      console.log(err);
+    } catch {
       toast.error("خطا در حذف پیام");
     } finally {
       setLoadingIds((prev) => prev.filter((i) => i !== id));
     }
   };
 
-  if (!messages || messages.length === 0) {
+  if (loadingMessages)
+    return (
+      <p className="text-gray-700 dark:text-gray-300">در حال بارگذاری...</p>
+    );
+
+  if (!messages || messages.length === 0)
     return (
       <p className="text-gray-700 dark:text-gray-300">هیچ پیامی وجود ندارد.</p>
     );
-  }
 
   return (
     <div className="flex flex-col gap-4">

@@ -9,9 +9,9 @@ import {
   FaTags,
   FaBars,
   FaTimes,
-  FaCog,
   FaHome,
 } from "react-icons/fa";
+import { MdOutlineMessage } from "react-icons/md";
 
 function Sidebar() {
   const [isOpen, setIsOpen] = useState(false);
@@ -73,6 +73,14 @@ function Sidebar() {
               className="flex items-center gap-3 hover:text-primary dark:hover:text-accent transition"
             >
               <FaTags className="text-accent text-2xl" /> مدیریت دسته‌بندی‌ها
+            </Link>
+          </li>
+          <li>
+            <Link
+              href="/dashboard/message"
+              className="flex items-center gap-3 hover:text-primary dark:hover:text-accent transition"
+            >
+              <MdOutlineMessage className="text-accent text-2xl" /> پیغام ها
             </Link>
           </li>
           <li>

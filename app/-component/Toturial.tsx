@@ -43,8 +43,8 @@ export default function Tutorial() {
   }
 
   return (
-    <section className="py-16 px-14 relative">
-      <h1 className="text-5xl md:text-6xl font-extrabold bg-gradient-to-r from-pink-500 via-purple-500 to-indigo-600 text-transparent bg-clip-text animate-fadeIn mb-12 pt-8 text-center">
+    <section className="py-16 md:px-14 relative">
+      <h1 className="text-4xl md:text-6xl font-extrabold bg-gradient-to-r from-pink-500 via-purple-500 to-indigo-600 text-transparent bg-clip-text animate-fadeIn mb-12 pt-8 text-center">
         دوره‌های آموزشی
       </h1>
 
@@ -62,7 +62,7 @@ export default function Tutorial() {
           1280: { slidesPerView: 4 },
         }}
         loop
-        className="px-6 relative"
+        className="md:px-6 relative"
       >
         {courses.map((course) => (
           <SwiperSlide key={course._id}>
@@ -71,6 +71,7 @@ export default function Tutorial() {
                 id={course._id}
                 title={course.title}
                 coverImage={course.coverImage}
+                itemType="course"
               />
             </div>
           </SwiperSlide>

@@ -1,8 +1,6 @@
 "use client";
 
-import Link from "next/link";
 import React, { useEffect, useRef, useState } from "react";
-import LetterGlitch from "./LetterGlitch";
 import Prism from "./Prism";
 
 export default function HeroTyping({
@@ -79,7 +77,7 @@ export default function HeroTyping({
 
   return (
     <section
-      className="relative w-full min-h-[100vh] flex items-center justify-center py-16 px-6 overflow-hidden mt-[-80px]"
+      className="relative w-full min-h-[100vh] flex items-center justify-center py-16 px-6 overflow-hidden mt-[-85px]"
       dir="rtl"
     >
       <div className="absolute inset-0">

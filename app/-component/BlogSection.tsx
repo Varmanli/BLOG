@@ -87,12 +87,7 @@ export default function BlogSection({
   const displayBlogs = hideTabs ? sortedBlogs : sortedBlogs.slice(0, 9);
 
   return (
-    <section
-      id="blog"
-      className={`relative z-20 px-14 ${
-        hideTabs ? "pb-16" : "py-16"
-      } overflow-x-hidden`}
-    >
+    <section id="blog" className={`relative z-20 md:px-14 overflow-x-hidden`}>
       <h1
         className={`text-4xl md:text-5xl font-extrabold bg-gradient-to-r from-pink-500 via-purple-500 to-indigo-600 text-transparent bg-clip-text animate-fadeIn mb-8 text-center ${
           hideTabs ? "pt-10" : "pt-14"
@@ -221,7 +216,7 @@ export default function BlogSection({
 
       {/* Swiper بلاگ‌ها */}
       <Swiper
-        modules={[Navigation, Pagination, Autoplay]}
+        modules={[Pagination, Autoplay]}
         navigation
         pagination={{ clickable: true }}
         autoplay={{ delay: 3000, disableOnInteraction: false }}
@@ -239,12 +234,13 @@ export default function BlogSection({
         {displayBlogs.length ? (
           displayBlogs.map((blog) => (
             <SwiperSlide key={String(blog._id)}>
-              <div className="pb-20 p-4">
+              <div className="pb-20 p-5">
                 <Card
                   id={String(blog._id)}
                   title={blog.title}
                   coverImage={blog.coverImage}
                   buttonText="مطالعه مقاله"
+                  itemType="blog"
                 />
               </div>
             </SwiperSlide>
@@ -258,7 +254,7 @@ export default function BlogSection({
 
       {/* دکمه مشاهده همه مقالات */}
       {!hideTabs && (
-        <div className="text-center mt-12 z-10 relative">
+        <div className="text-center my-5 z-10 relative">
           <Link
             href={
               selectedCategory === "all"

@@ -98,7 +98,7 @@ export default async function BlogPage({ params }: { params: { id: string } }) {
         {parse(blog.content)}
       </div>
 
-      <div className="w-full flex justify-between bg-accent rounded-lg p-1">
+      <div className="w-full text-sm md:text-base flex justify-between bg-accent rounded-lg p-1 mt-10">
         {blog.createdAt && (
           <span className="bg-white/10 px-2 py-1 rounded-lg">
             تاریخ انتشار:

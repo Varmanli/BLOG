@@ -3,6 +3,7 @@ import { Vazirmatn } from "next/font/google";
 import "./globals.css";
 import { Toaster } from "react-hot-toast";
 import ScrollToTop from "./-component/ScrollToTop";
+import Head from "next/head";
 
 const vazir = Vazirmatn({
   subsets: ["latin", "arabic"],
@@ -55,6 +56,13 @@ export default function RootLayout({
 }) {
   return (
     <html lang="fa" dir="rtl" className="dark">
+      {" "}
+      <Head>
+        <meta
+          name="google-site-verification"
+          content="google76f6da39e0e22527"
+        />
+      </Head>
       <body className={`${vazir.className} min-h-screen`}>
         {children}
         <Toaster position="top-center" reverseOrder={false} />

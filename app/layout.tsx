@@ -34,7 +34,7 @@ export const metadata: Metadata = {
     title: "NexPad | آموزش برنامه نویسی مدرن",
     description:
       "وبلاگ NexPad مرجعی برای مقالات آموزشی در زمینه برنامه نویسی وب، جاوااسکریپت، React، Next.js و Node.js.",
-    url: "https://nexpad.com",
+    url: "https://nexpad.ir",
     siteName: "NexPad",
     locale: "fa_IR",
     type: "website",
@@ -48,9 +48,6 @@ export const metadata: Metadata = {
   },
   metadataBase: new URL("https://nexpad.com"),
   alternates: { canonical: "/" },
-  verification: {
-    google: "BjbsQ6NaDnharRuRcNbyKqFZtVhlY5rqa4q0vvhNvH0",
-  },
 };
 
 export default function RootLayout({

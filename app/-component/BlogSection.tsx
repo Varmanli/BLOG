@@ -8,6 +8,7 @@ import Link from "next/link";
 import Status from "./Status";
 import { motion } from "framer-motion";
 import { FaFire, FaSortAmountDownAlt, FaSortAmountUp } from "react-icons/fa";
+import Card from "./Card";
 
 interface BlogSectionProps {
   hideTabs?: boolean;
@@ -106,10 +107,10 @@ export default function BlogSection({
         }`}
       >
         {categoryName === "همه مقالات"
-          ? "همه مقالات آموزشی"
+          ? "همه مقالات "
           : categoryName
-          ? `مقالات آموزشی ${categoryName}`
-          : "مقالات آموزشی"}
+          ? `مقالات  ${categoryName}`
+          : "مقالات "}
       </h1>
 
       {/* ردیف دکمه‌ها: دسته‌بندی و مرتب‌سازی */}
@@ -269,7 +270,12 @@ export default function BlogSection({
         >
           {displayBlogs.map((blog) => (
             <motion.div key={String(blog._id)} variants={itemVariants}>
-              <BlogCard blog={blog} />
+              <Card
+                id={blog.id}
+                title={blog.title}
+                coverImage={blog.coverImage}
+                buttonText="مطالعه مقاله"
+              />
             </motion.div>
           ))}
         </motion.div>
@@ -297,12 +303,12 @@ export default function BlogSection({
 
       {/* افکت بک‌گراند */}
       <div
-        className="absolute top-1/4 left-0 w-72 h-72 md:w-96 md:h-96 rounded-full 
+        className="absolute top-1/4 left-0 w-72 h-72 md:w-[400px] md:h-[400px] rounded-full 
                 bg-gradient-to-r from-purple-500 via-pink-500 to-indigo-400 
                 opacity-30 blur-3xl pointer-events-none -z-10"
       ></div>
       <div
-        className="absolute top-20 right-0 w-72 h-72 md:w-96 md:h-96 rounded-full 
+        className="absolute top-20 right-0 w-72 md:w-[400px] md:h-[400px] rounded-full 
                 bg-gradient-to-r from-purple-500 via-pink-500 to-indigo-400 
                 opacity-30 blur-3xl pointer-events-none -z-10"
       ></div>

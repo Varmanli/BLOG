@@ -39,7 +39,7 @@ export default function PostForm({ post, mode }: PostFormProps) {
   useEffect(() => {
     async function fetchCategories() {
       try {
-        const res = await fetch("/api/categories"); // فرض می‌کنیم این API وجود دارد
+        const res = await fetch("/api/categories");
         if (res.ok) {
           const data = await res.json();
           setCategories(data);
@@ -172,11 +172,14 @@ export default function PostForm({ post, mode }: PostFormProps) {
     <ImageProvider>
       <form
         onSubmit={handleSubmit}
-        className="max-w-5xl bg-[#1E1E22] rounded-2xl mx-auto p-10 space-y-6"
+        className="max-w-5xl mx-auto p-10 space-y-6 
+                   bg-white dark:bg-[#1E1E22] 
+                   rounded-2xl shadow-sm border 
+                   border-gray-200 dark:border-gray-700"
       >
         {/* Title */}
         <div>
-          <label className="block  font-medium  text-gray-700 dark:text-gray-300 mb-2">
+          <label className="block font-medium text-gray-700 dark:text-gray-300 mb-2">
             عنوان پست
           </label>
           <input
@@ -186,7 +189,7 @@ export default function PostForm({ post, mode }: PostFormProps) {
             className={`w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors ${
               errors.title
                 ? "border-red-500 bg-red-50 dark:bg-red-900/20"
-                : "border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800"
+                : "border-gray-300 bg-white dark:border-gray-600 dark:bg-gray-800"
             }`}
             disabled={isLoading}
           />
@@ -208,7 +211,7 @@ export default function PostForm({ post, mode }: PostFormProps) {
             className={`w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors ${
               errors.category
                 ? "border-red-500 bg-red-50 dark:bg-red-900/20"
-                : "border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800"
+                : "border-gray-300 bg-white dark:border-gray-600 dark:bg-gray-800"
             }`}
             disabled={isLoading}
           >
@@ -258,7 +261,7 @@ export default function PostForm({ post, mode }: PostFormProps) {
           </div>
           {(coverPreview || existingCoverUrl) && (
             <div className="relative w-full max-w-md">
-              <div className="relative aspect-video rounded-lg overflow-hidden border">
+              <div className="relative aspect-video rounded-lg overflow-hidden border border-gray-300 dark:border-gray-600">
                 <Image
                   src={coverPreview || existingCoverUrl || ""}
                   alt="Cover Preview"

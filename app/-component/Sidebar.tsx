@@ -10,22 +10,30 @@ import {
   FaBars,
   FaTimes,
   FaHome,
+  FaBook,
+  FaChevronDown,
+  FaChevronUp,
 } from "react-icons/fa";
 import { MdOutlineMessage } from "react-icons/md";
 
 function Sidebar() {
   const [isOpen, setIsOpen] = useState(false);
+  const [openMenu, setOpenMenu] = useState<null | "blog" | "course">(null);
 
-  const toggleSidebar = () => {
-    setIsOpen((prev) => !prev);
+  const toggleSidebar = () => setIsOpen((prev) => !prev);
+  const toggleMenu = (menu: "blog" | "course") => {
+    setOpenMenu((prev) => (prev === menu ? null : menu));
   };
 
   const linkClasses =
-    "flex items-center gap-3 px-4 py-3 rounded-lg transition-all hover:bg-accent/20 dark:hover:bg-[#00FF9920] hover:shadow-lg";
+    "flex items-center justify-between px-4 py-3 rounded-lg transition-all hover:bg-accent/20 dark:hover:bg-[#00FF9920] hover:shadow-lg font-medium";
+
+  const subLinkClasses =
+    "flex items-center gap-2 pr-10 py-2 rounded-lg transition-all hover:bg-accent/10 dark:hover:bg-[#00FF9920] ";
 
   return (
     <div className="flex">
-      {/* دکمه منوی همبرگری */}
+      {/* دکمه همبرگری */}
       <button
         onClick={toggleSidebar}
         className="p-4 text-primary dark:text-accent md:hidden focus:outline-none focus:ring-2 focus:ring-accent rounded-lg"
@@ -43,41 +51,95 @@ function Sidebar() {
           ${isOpen ? "translate-x-0" : "-translate-x-full"} md:translate-x-0
         `}
       >
-        {/* عنوان داشبورد */}
         <h1 className="text-2xl font-bold mb-8 text-center text-accent dark:text-[#00FF99]">
           داشبورد مدیریت
         </h1>
 
-        {/* لینک‌ها */}
         <ul className="space-y-3">
           <li>
             <Link href="/dashboard" className={linkClasses}>
-              <FaHome className="text-accent text-xl" /> صفحه اصلی
+              صفحه اصلی
             </Link>
           </li>
+
+          {/* وبلاگ */}
           <li>
-            <Link href="/dashboard/posts" className={linkClasses}>
-              <FaList className="text-accent text-xl" /> مدیریت بلاگ‌ها
-            </Link>
+            <button
+              onClick={() => toggleMenu("blog")}
+              className={linkClasses + " w-full text-left"}
+            >
+              <span className="flex items-center gap-3">مدیریت وبلاگ</span>
+              {openMenu === "blog" ? (
+                <FaChevronUp className="text-gray-500 dark:text-gray-300" />
+              ) : (
+                <FaChevronDown className="text-gray-500 dark:text-gray-300" />
+              )}
+            </button>
+            {openMenu === "blog" && (
+              <ul className="mt-1 bg-[#0F0F20] rounded-md">
+                {[
+                  {
+                    href: "/dashboard/posts",
+                    label: "لیست بلاگ‌ها",
+                  },
+                  {
+                    href: "/dashboard/posts/create",
+                    label: "افزودن بلاگ",
+                  },
+                  {
+                    href: "/dashboard/categories",
+                    label: "دسته‌بندی‌ها",
+                  },
+                ].map((item, i) => (
+                  <li key={i} className={subLinkClasses}>
+                    <Link href={item.href}>{item.label}</Link>
+                  </li>
+                ))}
+              </ul>
+            )}
           </li>
+
+          {/* دوره‌ها */}
           <li>
-            <Link href="/dashboard/posts/create" className={linkClasses}>
-              <FaPlus className="text-accent text-xl" /> افزودن بلاگ جدید
-            </Link>
+            <button
+              onClick={() => toggleMenu("course")}
+              className={linkClasses + " w-full text-left"}
+            >
+              <span className="flex items-center gap-3">مدیریت دوره‌ها</span>
+              {openMenu === "course" ? (
+                <FaChevronUp className="text-gray-500 dark:text-gray-300" />
+              ) : (
+                <FaChevronDown className="text-gray-500 dark:text-gray-300" />
+              )}
+            </button>
+            {openMenu === "course" && (
+              <ul className="mt-1 bg-[#0F0F20] rounded-md">
+                {[
+                  {
+                    href: "/dashboard/courses",
+                    label: "لیست دوره‌ها",
+                  },
+                  {
+                    href: "/dashboard/courses/create",
+                    label: "افزودن دوره",
+                  },
+                ].map((item, i) => (
+                  <li key={i} className={subLinkClasses}>
+                    <Link href={item.href}>{item.label}</Link>
+                  </li>
+                ))}
+              </ul>
+            )}
           </li>
-          <li>
-            <Link href="/dashboard/categories" className={linkClasses}>
-              <FaTags className="text-accent text-xl" /> مدیریت دسته‌بندی‌ها
-            </Link>
-          </li>
+
           <li>
             <Link href="/dashboard/message" className={linkClasses}>
-              <MdOutlineMessage className="text-accent text-xl" /> پیغام‌ها
+              پیغام‌ها
             </Link>
           </li>
           <li>
             <Link href="/dashboard/stats" className={linkClasses}>
-              <FaChartBar className="text-accent text-xl" /> آمار و گزارش‌ها
+              آمار و گزارش‌ها
             </Link>
           </li>
         </ul>

@@ -39,9 +39,9 @@ export default function Header() {
   if (!themeContext) return null;
 
   return (
-    <header className="flex flex-row-reverse justify-between items-center px-5 py-5 md:px-14 relative">
+    <header className="flex flex-row-reverse justify-between z-20 items-center px-5 py-5 md:px-[150px] relative">
       <Link href="/" className="flex items-center">
-        <Image src={logo} alt="logo" width={120} />
+        <Image src={logo} alt="logo" width={150} />
       </Link>
 
       {/* منوی دسکتاپ */}
@@ -58,13 +58,13 @@ export default function Header() {
         <li>
           <Link
             href="/"
-            className="hover:text-blue-600 dark:hover:text-accent font-semibold transition-all"
+            className="hover:text-blue-600 text-lg dark:hover:text-accent font-semibold transition-all"
           >
             صفحه اصلی
           </Link>
         </li>
 
-        <li className="relative group">
+        <li className="relative group text-lg">
           <button className="flex items-center gap-1 hover:text-blue-600 dark:hover:text-accent font-semibold transition-all">
             مقالات <FaChevronDown size={14} />
           </button>
@@ -93,7 +93,7 @@ export default function Header() {
         <li>
           <Link
             href="/about"
-            className="hover:text-blue-600 dark:hover:text-accent font-semibold transition-all"
+            className="hover:text-blue-600 dark:hover:text-accent text-lg font-semibold transition-all"
           >
             درباره ما
           </Link>
@@ -101,7 +101,7 @@ export default function Header() {
         <li>
           <Link
             href="/contact"
-            className="hover:text-blue-600 dark:hover:text-accent font-semibold transition-all"
+            className="hover:text-blue-600 dark:hover:text-accent text-lg font-semibold transition-all"
           >
             تماس با ما
           </Link>

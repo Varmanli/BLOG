@@ -122,23 +122,6 @@ export default function HeroTyping({
             </code>
           </pre>
         </div>
-        {/* <Link href={"#blog"}>
-          <button
-            className="
-    relative mt-10 px-6 py-3
-    text-sm md:text-base font-bold font-mono
-    rounded-xl shadow-lg transition-all duration-300
-    bg-gradient-to-r from-fuchsia-600 via-purple-600 to-cyan-500
-    text-white dark:from-emerald-500 dark:via-teal-500 dark:to-cyan-400
-    hover:scale-105 hover:shadow-[0_0_20px_rgba(0,255,200,0.7)]
-    focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-fuchsia-400
-    dark:focus:ring-emerald-400
-  "
-          >
-            <span className="relative z-10">مشاهده مقالات</span>
-            <span className="absolute inset-0 rounded-xl bg-gradient-to-r from-pink-500/30 to-cyan-400/30 blur-xl opacity-60 -z-10" />
-          </button>
-        </Link> */}
       </div>
     </section>
   );

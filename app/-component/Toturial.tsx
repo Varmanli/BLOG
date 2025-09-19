@@ -9,6 +9,7 @@ import "swiper/css/navigation";
 import "swiper/css/pagination";
 import "swiper/css/autoplay";
 import Card from "./Card";
+import Loading from "../loading";
 
 export default function Tutorial() {
   const [courses, setCourses] = useState<any[]>([]);
@@ -34,16 +35,7 @@ export default function Tutorial() {
   }, []);
 
   if (loading) {
-    return (
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 p-6">
-        {[...Array(4)].map((_, i) => (
-          <div
-            key={i}
-            className="animate-pulse bg-gray-200 dark:bg-gray-700 rounded-3xl h-72"
-          ></div>
-        ))}
-      </div>
-    );
+    return <Loading />;
   }
 
   if (error) {
@@ -51,7 +43,7 @@ export default function Tutorial() {
   }
 
   return (
-    <section className="py-16 px-14">
+    <section className="py-16 px-14 relative">
       <h1 className="text-5xl md:text-6xl font-extrabold bg-gradient-to-r from-pink-500 via-purple-500 to-indigo-600 text-transparent bg-clip-text animate-fadeIn mb-12 pt-8 text-center">
         دوره‌های آموزشی
       </h1>
@@ -84,6 +76,12 @@ export default function Tutorial() {
           </SwiperSlide>
         ))}
       </Swiper>
+      {/* بک‌گراند گرافیکی */}
+      <div
+        className="absolute top-0 left-[33%]  w-72 h-72 md:w-[600px] md:h-[500px] 
+                      rounded-full bg-gradient-to-r from-purple-500 via-pink-500 to-indigo-400 
+                      opacity-40 blur-3xl pointer-events-none"
+      ></div>
     </section>
   );
 }

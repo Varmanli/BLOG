@@ -3,12 +3,17 @@
 import { useEffect, useState } from "react";
 import { IBlog } from "@/models/Blog";
 import { ICategory } from "@/models/Category";
-import BlogCard from "./BlogCard";
+import Card from "./Card";
 import Link from "next/link";
 import Status from "./Status";
 import { motion } from "framer-motion";
 import { FaFire, FaSortAmountDownAlt, FaSortAmountUp } from "react-icons/fa";
-import Card from "./Card";
+import { Swiper, SwiperSlide } from "swiper/react";
+import { Navigation, Pagination, Autoplay } from "swiper/modules";
+import "swiper/css";
+import "swiper/css/navigation";
+import "swiper/css/pagination";
+import "swiper/css/autoplay";
 
 interface BlogSectionProps {
   hideTabs?: boolean;
@@ -65,13 +70,11 @@ export default function BlogSection({
     return <Status type="loading" message="در حال دریافت بلاگ‌ها..." />;
   if (error) return <Status type="error" message="خطا در دریافت داده‌ها" />;
 
-  // فیلتر بر اساس دسته‌بندی
   const filteredBlogs =
     selectedCategory === "all"
       ? blogs
       : blogs.filter((blog) => String(blog.category) === selectedCategory);
 
-  // مرتب‌سازی
   const sortedBlogs = [...filteredBlogs].sort((a, b) => {
     if (sortOrder === "newest")
       return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
@@ -81,23 +84,12 @@ export default function BlogSection({
     return 0;
   });
 
-  // محدود کردن تعداد بلاگ‌ها اگر hideTabs فعال نباشه
   const displayBlogs = hideTabs ? sortedBlogs : sortedBlogs.slice(0, 9);
-
-  const containerVariants = {
-    hidden: { opacity: 0 },
-    visible: { opacity: 1, transition: { staggerChildren: 0.1 } },
-  };
-
-  const itemVariants = {
-    hidden: { opacity: 0, y: 20 },
-    visible: { opacity: 1, y: 0 },
-  };
 
   return (
     <section
       id="blog"
-      className={`relative z-20 ${
+      className={`relative z-20 px-14 ${
         hideTabs ? "pb-16" : "py-16"
       } overflow-x-hidden`}
     >
@@ -107,17 +99,17 @@ export default function BlogSection({
         }`}
       >
         {categoryName === "همه مقالات"
-          ? "همه مقالات "
+          ? "همه مقالات"
           : categoryName
-          ? `مقالات  ${categoryName}`
-          : "مقالات "}
+          ? `مقالات ${categoryName}`
+          : "مقالات"}
       </h1>
 
-      {/* ردیف دکمه‌ها: دسته‌بندی و مرتب‌سازی */}
-      <div className="container mx-auto px-4 flex flex-row-reverse justify-between items-center gap-4 mb-6 z-20 relative">
-        {!hideTabs && (
+      {/* دکمه‌های دسته‌بندی و مرتب‌سازی */}
+      {hideTabs && (
+        <div className="container mx-auto px-4 flex flex-row-reverse justify-between items-center gap-4 mb-6  z-20 relative">
           <div className="relative w-48 md:w-56">
-            {/* دکمه‌ی Dropdown */}
+            {/* Dropdown */}
             <button
               onClick={() => setDropdownOpen(!dropdownOpen)}
               className="w-full flex justify-between items-center px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-200 font-medium shadow-sm hover:shadow-md transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-1"
@@ -145,30 +137,21 @@ export default function BlogSection({
               </svg>
             </button>
 
-            {/* منوی Dropdown */}
             {dropdownOpen && (
-              <div
-                className="absolute mt-2 w-full rounded-lg bg-white dark:bg-gray-800 shadow-lg border border-gray-200 dark:border-gray-700 z-50 overflow-hidden animate-dropdown-fade"
-                style={{ animation: "dropdown-fade 0.2s ease-out" }}
-              >
-                {/* گزینه همه مقالات */}
+              <div className="absolute mt-2 w-full rounded-lg bg-white dark:bg-gray-800 shadow-lg border border-gray-200 dark:border-gray-700 z-50 overflow-hidden animate-dropdown-fade">
                 <div
                   onClick={() => {
                     setSelectedCategory("all");
                     setDropdownOpen(false);
                   }}
-                  className={`px-4 py-2 cursor-pointer text-gray-700 dark:text-gray-200 
-            hover:bg-gradient-to-r hover:from-purple-500 hover:to-pink-500 hover:text-white 
-            transition-colors duration-200 ${
-              selectedCategory === "all"
-                ? "bg-purple-200 dark:bg-accent text-gray-700 dark:text-gray-800 font-semibold"
-                : "text-gray-800 dark:text-gray-200"
-            } rounded-t-lg`}
+                  className={`px-4 py-2 cursor-pointer text-gray-700 dark:text-gray-200 hover:bg-gradient-to-r hover:from-purple-500 hover:to-pink-500 hover:text-white transition-colors duration-200 ${
+                    selectedCategory === "all"
+                      ? "bg-purple-200 dark:bg-accent font-semibold"
+                      : ""
+                  } rounded-t-lg`}
                 >
                   همه مقالات
                 </div>
-
-                {/* بقیه دسته‌بندی‌ها */}
                 {categories.map((cat, idx) => (
                   <div
                     key={String(cat._id)}
@@ -176,114 +159,102 @@ export default function BlogSection({
                       setSelectedCategory(String(cat._id));
                       setDropdownOpen(false);
                     }}
-                    className={`px-4 py-2 cursor-pointer text-gray-700 dark:text-gray-200 
-            hover:bg-gradient-to-r hover:from-purple-500 hover:to-pink-500 hover:text-white 
-            transition-colors duration-200 ${
-              selectedCategory === String(cat._id)
-                ? "bg-purple-200 dark:bg-accent text-gray-700 dark:text-gray-800 font-semibold"
-                : "text-gray-800 dark:text-gray-200"
-            } ${idx === categories.length - 1 ? "rounded-b-lg" : ""}`}
+                    className={`px-4 py-2 cursor-pointer text-gray-700 dark:text-gray-200 hover:bg-gradient-to-r hover:from-purple-500 hover:to-pink-500 hover:text-white transition-colors duration-200 ${
+                      selectedCategory === String(cat._id)
+                        ? "bg-purple-200 dark:bg-accent font-semibold"
+                        : ""
+                    } ${idx === categories.length - 1 ? "rounded-b-lg" : ""}`}
                   >
                     {cat.name}
                   </div>
                 ))}
               </div>
             )}
-
-            {/* افکت انیمیشن */}
-            <style jsx>{`
-              @keyframes dropdown-fade {
-                0% {
-                  opacity: 0;
-                  transform: translateY(-5px);
-                }
-                100% {
-                  opacity: 1;
-                  transform: translateY(0);
-                }
-              }
-              .animate-dropdown-fade {
-                animation: dropdown-fade 0.2s ease-out;
-              }
-            `}</style>
           </div>
-        )}
-
-        {/* مرتب‌سازی */}
-        <div className="relative inline-block">
-          <div className="relative inline-block group">
-            {/* دکمه مرتب‌سازی */}
-            <button className="w-full flex justify-between items-center gap-3 px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-200 font-medium shadow-sm hover:shadow-md transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-1">
-              {sortOrder === "newest" && (
-                <>
-                  جدیدترین <FaSortAmountDownAlt />
-                </>
-              )}
-              {sortOrder === "oldest" && (
-                <>
-                  قدیمی‌ترین <FaSortAmountUp />
-                </>
-              )}
-              {sortOrder === "popular" && (
-                <>
-                  محبوب‌ترین <FaFire />
-                </>
-              )}
-            </button>
-            <motion.div
-              initial={{ opacity: 0, y: -10, scale: 0.95 }}
-              animate={{ opacity: 1, y: 0, scale: 1 }}
-              exit={{ opacity: 0, y: -10, scale: 0.95 }}
-              transition={{ duration: 0.2, ease: "easeOut" }}
-              className="absolute mt-2 w-40 rounded-xl bg-white dark:bg-gray-800 shadow-xl z-20 overflow-hidden border border-gray-200 dark:border-gray-700 
-        opacity-0 scale-95 invisible group-hover:visible group-hover:opacity-100 group-hover:scale-100 transition-all duration-200"
-            >
-              {["newest", "oldest", "popular"].map((option) => (
-                <div
-                  key={option}
-                  onClick={() =>
-                    setSortOrder(option as "newest" | "oldest" | "popular")
-                  }
-                  className="px-4 py-2 cursor-pointer text-gray-700 dark:text-gray-200 
-            hover:bg-gradient-to-r hover:from-purple-500 hover:to-pink-500 hover:text-white 
-            transition-colors duration-200"
-                >
-                  {option === "newest"
-                    ? "جدیدترین"
-                    : option === "oldest"
-                    ? "قدیمی‌ترین"
-                    : "محبوب‌ترین"}
-                </div>
-              ))}
-            </motion.div>
+          مرتب‌سازی
+          <div className="relative inline-block">
+            <div className="relative inline-block group">
+              <button className="w-full flex justify-between items-center gap-3 px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-200 font-medium shadow-sm hover:shadow-md transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-1">
+                {sortOrder === "newest" && (
+                  <>
+                    جدیدترین <FaSortAmountDownAlt />
+                  </>
+                )}
+                {sortOrder === "oldest" && (
+                  <>
+                    قدیمی‌ترین <FaSortAmountUp />
+                  </>
+                )}
+                {sortOrder === "popular" && (
+                  <>
+                    محبوب‌ترین <FaFire />
+                  </>
+                )}
+              </button>
+              <motion.div
+                initial={{ opacity: 0, y: -10, scale: 0.95 }}
+                animate={{ opacity: 1, y: 0, scale: 1 }}
+                exit={{ opacity: 0, y: -10, scale: 0.95 }}
+                transition={{ duration: 0.2, ease: "easeOut" }}
+                className="absolute mt-2 w-40 rounded-xl bg-white dark:bg-gray-800 shadow-xl z-20 overflow-hidden border border-gray-200 dark:border-gray-700 opacity-0 scale-95 invisible group-hover:visible group-hover:opacity-100 group-hover:scale-100 transition-all duration-200"
+              >
+                {["newest", "oldest", "popular"].map((option) => (
+                  <div
+                    key={option}
+                    onClick={() =>
+                      setSortOrder(option as "newest" | "oldest" | "popular")
+                    }
+                    className="px-4 py-2 cursor-pointer text-gray-700 dark:text-gray-200 hover:bg-gradient-to-r hover:from-purple-500 hover:to-pink-500 hover:text-white transition-colors duration-200"
+                  >
+                    {option === "newest"
+                      ? "جدیدترین"
+                      : option === "oldest"
+                      ? "قدیمی‌ترین"
+                      : "محبوب‌ترین"}
+                  </div>
+                ))}
+              </motion.div>
+            </div>
           </div>
         </div>
-      </div>
-
-      {/* لیست بلاگ‌ها */}
-      {displayBlogs.length ? (
-        <motion.div
-          className="container mx-auto px-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 z-10 relative"
-          variants={containerVariants}
-          initial="hidden"
-          animate="visible"
-        >
-          {displayBlogs.map((blog) => (
-            <motion.div key={String(blog._id)} variants={itemVariants}>
-              <Card
-                id={blog.id}
-                title={blog.title}
-                coverImage={blog.coverImage}
-                buttonText="مطالعه مقاله"
-              />
-            </motion.div>
-          ))}
-        </motion.div>
-      ) : (
-        <p className="text-center text-gray-500 dark:text-gray-400 mt-12 z-10 relative">
-          مقاله‌ای برای این دسته‌بندی پیدا نشد.
-        </p>
       )}
+
+      {/* Swiper بلاگ‌ها */}
+      <Swiper
+        modules={[Navigation, Pagination, Autoplay]}
+        navigation
+        pagination={{ clickable: true }}
+        autoplay={{ delay: 3000, disableOnInteraction: false }}
+        spaceBetween={24}
+        slidesPerView={1}
+        breakpoints={{
+          640: { slidesPerView: 1 },
+          768: { slidesPerView: 2 },
+          1024: { slidesPerView: 3 },
+          1280: { slidesPerView: 4 },
+        }}
+        loop
+        className="px-6"
+      >
+        {displayBlogs.length ? (
+          displayBlogs.map((blog) => (
+            <SwiperSlide key={String(blog._id)}>
+              <div className="pb-20 p-4">
+                <Card
+                  id={String(blog._id)}
+                  title={blog.title}
+                  coverImage={blog.coverImage}
+                  buttonText="مطالعه مقاله"
+                />
+              </div>
+            </SwiperSlide>
+          ))
+        ) : (
+          <p className="text-center text-gray-500 dark:text-gray-400 mt-12 z-10 relative">
+            مقاله‌ای برای این دسته‌بندی پیدا نشد.
+          </p>
+        )}
+      </Swiper>
 
       {/* دکمه مشاهده همه مقالات */}
       {!hideTabs && (
@@ -301,17 +272,9 @@ export default function BlogSection({
         </div>
       )}
 
-      {/* افکت بک‌گراند */}
-      <div
-        className="absolute top-1/4 left-0 w-72 h-72 md:w-[400px] md:h-[400px] rounded-full 
-                bg-gradient-to-r from-purple-500 via-pink-500 to-indigo-400 
-                opacity-30 blur-3xl pointer-events-none -z-10"
-      ></div>
-      <div
-        className="absolute top-20 right-0 w-72 md:w-[400px] md:h-[400px] rounded-full 
-                bg-gradient-to-r from-purple-500 via-pink-500 to-indigo-400 
-                opacity-30 blur-3xl pointer-events-none -z-10"
-      ></div>
+      {/* بک‌گراند گرافیکی */}
+      <div className="absolute top-1/4 left-0 w-72 h-72 md:w-[400px] md:h-[400px] rounded-full bg-gradient-to-r from-purple-500 via-pink-500 to-indigo-400 opacity-30 blur-3xl pointer-events-none -z-10"></div>
+      <div className="absolute top-20 right-0 w-72 md:w-[400px] md:h-[400px] rounded-full bg-gradient-to-r from-purple-500 via-pink-500 to-indigo-400 opacity-30 blur-3xl pointer-events-none -z-10"></div>
     </section>
   );
 }

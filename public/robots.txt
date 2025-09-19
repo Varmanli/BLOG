@@ -1,0 +1,9 @@
+# *
+User-agent: *
+Allow: /
+
+# Host
+Host: https://nexpad.ir
+
+# Sitemaps
+Sitemap: https://nexpad.ir/sitemap.xml

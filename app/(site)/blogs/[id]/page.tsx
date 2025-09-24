@@ -62,7 +62,7 @@ export default async function BlogPage({ params }: { params: { id: string } }) {
 
       {/* ادامه‌ی کدت */}
       {blog.coverImage && (
-        <div className="relative w-full mt-[-50px] h-64 md:h-80 overflow-hidden rounded-2xl shadow-lg mb-6 z-10">
+        <div className="relative w-full mt-[-50px] h-64 md:h-[400px] overflow-hidden rounded-2xl shadow-lg mb-6 z-10">
           <Image
             src={blog.coverImage}
             alt={blog.title}

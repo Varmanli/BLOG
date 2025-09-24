@@ -2,6 +2,7 @@
 
 import React, { useEffect, useRef, useState } from "react";
 import Prism from "./Prism";
+import Link from "next/link";
 
 export default function HeroTyping({
   lines = [
@@ -100,7 +101,6 @@ export default function HeroTyping({
         <p className="text-base md:text-xl font-mono text-green-800/90 mt-4 dark:text-green-300/80">
           [system] → پلتفرم آموزشی برای توسعه‌دهنده‌های آینده
         </p>
-
         <div className="mt-8 rounded-xl p-6 bg-black/60 border border-fuchsia-500/20 backdrop-blur-md shadow-2xl font-mono text-left max-w-2xl mx-auto">
           <pre
             className="m-0 whitespace-pre-wrap text-[14px] md:text-[15px] leading-snug"
@@ -120,6 +120,11 @@ export default function HeroTyping({
             </code>
           </pre>
         </div>
+        <Link href="#blog">
+          <button className=" absolute text-lg left-[42%] bottom-[-70%] px-5 py-3 mt-10  bg-gradient-to-r from-pink-500 via-purple-500 to-indigo-600 text-white font-semibold rounded-xl shadow-md hover:shadow-xl transition-all duration-300">
+            مشاهده مقالات
+          </button>
+        </Link>
       </div>
     </section>
   );

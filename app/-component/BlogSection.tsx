@@ -8,12 +8,6 @@ import Link from "next/link";
 import Status from "./Status";
 import { motion } from "framer-motion";
 import { FaFire, FaSortAmountDownAlt, FaSortAmountUp } from "react-icons/fa";
-import { Swiper, SwiperSlide } from "swiper/react";
-import { Navigation, Pagination, Autoplay } from "swiper/modules";
-import "swiper/css";
-import "swiper/css/navigation";
-import "swiper/css/pagination";
-import "swiper/css/autoplay";
 
 interface BlogSectionProps {
   hideTabs?: boolean;
@@ -87,7 +81,7 @@ export default function BlogSection({
   const displayBlogs = hideTabs ? sortedBlogs : sortedBlogs.slice(0, 9);
 
   return (
-    <section id="blog" className={`relative z-20 md:px-14 overflow-x-hidden`}>
+    <section id="blog" className={`relative z-20 md:px-14 `}>
       <h1
         className={`text-4xl md:text-5xl font-extrabold bg-gradient-to-r from-pink-500 via-purple-500 to-indigo-600 text-transparent bg-clip-text animate-fadeIn mb-8 text-center ${
           hideTabs ? "pt-10" : "pt-14"
@@ -101,7 +95,7 @@ export default function BlogSection({
       </h1>
 
       {/* دکمه‌های دسته‌بندی و مرتب‌سازی */}
-      {hideTabs && (
+      {!hideTabs && (
         <div className="container mx-auto px-4 flex flex-row-reverse justify-between items-center gap-4 mb-6  z-20 relative">
           <div className="relative w-48 md:w-56">
             {/* Dropdown */}
@@ -166,7 +160,7 @@ export default function BlogSection({
               </div>
             )}
           </div>
-          مرتب‌سازی
+          {/* مرتب‌سازی */}
           <div className="relative inline-block">
             <div className="relative inline-block group">
               <button className="w-full flex justify-between items-center gap-3 px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-200 font-medium shadow-sm hover:shadow-md transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-1">
@@ -214,43 +208,26 @@ export default function BlogSection({
         </div>
       )}
 
-      {/* Swiper بلاگ‌ها */}
-      <Swiper
-        modules={[Pagination, Autoplay]}
-        navigation
-        pagination={{ clickable: true }}
-        autoplay={{ delay: 3000, disableOnInteraction: false }}
-        spaceBetween={24}
-        slidesPerView={1}
-        breakpoints={{
-          640: { slidesPerView: 1 },
-          768: { slidesPerView: 2 },
-          1024: { slidesPerView: 3 },
-          1280: { slidesPerView: 4 },
-        }}
-        loop
-        className="px-6"
-      >
+      {/* نمایش لیست بلاگ‌ها */}
+      <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3 px-6">
         {displayBlogs.length ? (
           displayBlogs.map((blog) => (
-            <SwiperSlide key={String(blog._id)}>
-              <div className="pb-20 p-5">
-                <Card
-                  id={String(blog._id)}
-                  title={blog.title}
-                  coverImage={blog.coverImage}
-                  buttonText="مطالعه مقاله"
-                  itemType="blog"
-                />
-              </div>
-            </SwiperSlide>
+            <div key={String(blog._id)} className="p-5">
+              <Card
+                id={String(blog._id)}
+                title={blog.title}
+                coverImage={blog.coverImage}
+                buttonText="مطالعه مقاله"
+                itemType="blog"
+              />
+            </div>
           ))
         ) : (
           <p className="text-center text-gray-500 dark:text-gray-400 mt-12 z-10 relative">
             مقاله‌ای برای این دسته‌بندی پیدا نشد.
           </p>
         )}
-      </Swiper>
+      </div>
 
       {/* دکمه مشاهده همه مقالات */}
       {!hideTabs && (
@@ -269,6 +246,7 @@ export default function BlogSection({
       )}
 
       {/* بک‌گراند گرافیکی */}
+      <div className="absolute top-1 left-[30%] w-72 h-72 md:w-[700px] md:h-[700px] rounded-full bg-gradient-to-r from-purple-500 via-pink-500 to-indigo-400 opacity-30 blur-3xl pointer-events-none -z-10"></div>
       <div className="absolute top-1/4 left-0 w-72 h-72 md:w-[400px] md:h-[400px] rounded-full bg-gradient-to-r from-purple-500 via-pink-500 to-indigo-400 opacity-30 blur-3xl pointer-events-none -z-10"></div>
       <div className="absolute top-20 right-0 w-72 md:w-[400px] md:h-[400px] rounded-full bg-gradient-to-r from-purple-500 via-pink-500 to-indigo-400 opacity-30 blur-3xl pointer-events-none -z-10"></div>
     </section>

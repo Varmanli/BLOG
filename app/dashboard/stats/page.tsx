@@ -1,7 +1,7 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { Bar, Line } from "react-chartjs-2";
+import { useEffect, useMemo, useState } from "react";
+import dynamic from "next/dynamic";
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -13,20 +13,34 @@ import {
   Tooltip,
   Legend,
 } from "chart.js";
-import { FaChartBar, FaEye, FaBlog, FaTags } from "react-icons/fa";
+import { FaChartBar } from "@react-icons/all-files/fa/FaChartBar";
+import { FaEye } from "@react-icons/all-files/fa/FaEye";
+import { FaBlog } from "@react-icons/all-files/fa/FaBlog";
+import { FaTags } from "@react-icons/all-files/fa/FaTags";
 import { toast } from "react-hot-toast";
 
-// ثبت کامپوننت‌های Chart.js
-ChartJS.register(
-  CategoryScale,
-  LinearScale,
-  BarElement,
-  PointElement,
-  LineElement,
-  Title,
-  Tooltip,
-  Legend
-);
+// Register ChartJS once on client
+if (typeof window !== "undefined" && !ChartJS.registry) {
+  ChartJS.register(
+    CategoryScale,
+    LinearScale,
+    BarElement,
+    PointElement,
+    LineElement,
+    Title,
+    Tooltip,
+    Legend
+  );
+}
+
+const Bar = dynamic(() => import("react-chartjs-2").then((m) => m.Bar), {
+  ssr: false,
+  loading: () => null,
+});
+const Line = dynamic(() => import("react-chartjs-2").then((m) => m.Line), {
+  ssr: false,
+  loading: () => null,
+});
 
 interface Stats {
   totalViews: number;
@@ -68,76 +82,88 @@ export default function StatsPage() {
       </p>
     );
 
-  const months = [
-    "فروردین",
-    "اردیبهشت",
-    "خرداد",
-    "تیر",
-    "مرداد",
-    "شهریور",
-    "مهر",
-    "آبان",
-    "آذر",
-    "دی",
-    "بهمن",
-    "اسفند",
-  ];
-
-  const barData = {
-    labels: months,
-    datasets: [
-      {
-        label: "تعداد بازدیدها",
-        data: stats.monthlyViews,
-        backgroundColor: "#00FF99",
-        borderRadius: 6,
-      },
+  const months = useMemo(
+    () => [
+      "فروردین",
+      "اردیبهشت",
+      "خرداد",
+      "تیر",
+      "مرداد",
+      "شهریور",
+      "مهر",
+      "آبان",
+      "آذر",
+      "دی",
+      "بهمن",
+      "اسفند",
     ],
-  };
+    []
+  );
 
-  const lineData = {
-    labels: months,
-    datasets: [
-      {
-        label: "تعداد بلاگ‌ها",
-        data: stats.monthlyBlogs,
-        borderColor: "#FFAB00",
-        backgroundColor: "rgba(255, 171, 0, 0.2)",
-        tension: 0.4,
-        fill: true,
-        pointRadius: 5,
-      },
-    ],
-  };
+  const barData = useMemo(
+    () => ({
+      labels: months,
+      datasets: [
+        {
+          label: "تعداد بازدیدها",
+          data: stats.monthlyViews,
+          backgroundColor: "#00FF99",
+          borderRadius: 6,
+        },
+      ],
+    }),
+    [months, stats.monthlyViews]
+  );
 
-  const chartOptions = {
-    responsive: true,
-    maintainAspectRatio: false,
-    plugins: {
-      legend: {
-        labels: {
-          color: "var(--tw-text-opacity)", // هماهنگ با Tailwind
+  const lineData = useMemo(
+    () => ({
+      labels: months,
+      datasets: [
+        {
+          label: "تعداد بلاگ‌ها",
+          data: stats.monthlyBlogs,
+          borderColor: "#FFAB00",
+          backgroundColor: "rgba(255, 171, 0, 0.2)",
+          tension: 0.4,
+          fill: true,
+          pointRadius: 5,
+        },
+      ],
+    }),
+    [months, stats.monthlyBlogs]
+  );
+
+  const chartOptions = useMemo(
+    () => ({
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: {
+          labels: {
+            color: "var(--tw-text-opacity)",
+          },
+        },
+        tooltip: {
+          mode: "index" as const,
+          intersect: false,
+        },
+        title: {
+          display: false,
         },
       },
-      tooltip: {
-        mode: "index" as const,
-        intersect: false,
+      scales: {
+        x: {
+          ticks: { color: "var(--tw-text-opacity)" },
+          grid: { color: "rgba(200,200,200,0.1)" },
+        },
+        y: {
+          ticks: { color: "var(--tw-text-opacity)" },
+          grid: { color: "rgba(200,200,200,0.1)" },
+        },
       },
-      title: {
-        display: false,
-      },
-    },
-    scales: {
-      x: {
-        ticks: { color: "var(--tw-text-opacity)" },
-        grid: { color: "rgba(200,200,200,0.1)" },
-      },
-      y: {
-        ticks: { color: "var(--tw-text-opacity)" },
-        grid: { color: "rgba(200,200,200,0.1)" },
-      },
-    },
-  };
+    }),
+    []
+  );
 
   return (
     <main className="p-6 min-h-screen text-gray-900 dark:text-gray-100">
@@ -202,7 +228,7 @@ export default function StatsPage() {
               plugins: {
                 ...chartOptions.plugins,
                 legend: {
-                  labels: { color: "#fff" }, // حالت روشن
+                  labels: { color: "#fff" },
                 },
               },
               scales: {

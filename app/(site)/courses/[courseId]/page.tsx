@@ -41,3 +41,4 @@ export default async function CourseRedirectPage({ params }: PageProps) {
 
   redirect(`/courses/${params.courseId}/lessons/${first._id}`);
 }
+

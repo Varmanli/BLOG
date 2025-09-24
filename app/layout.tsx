@@ -1,8 +1,15 @@
 import type { Metadata } from "next";
 import { Vazirmatn } from "next/font/google";
 import "./globals.css";
-import { Toaster } from "react-hot-toast";
+import dynamic from "next/dynamic";
 import ScrollToTop from "./-component/ScrollToTop";
+
+const Toaster = dynamic(
+  () => import("react-hot-toast").then((m) => m.Toaster),
+  {
+    ssr: false,
+  }
+);
 
 const vazir = Vazirmatn({
   subsets: ["latin", "arabic"],

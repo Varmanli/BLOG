@@ -1,8 +1,13 @@
 "use client";
 
-import React, { useEffect, useRef, useState } from "react";
-import Prism from "./Prism";
+import React, { useEffect, useMemo, useRef, useState } from "react";
+import dynamic from "next/dynamic";
 import Link from "next/link";
+
+const Prism = dynamic(() => import("./Prism"), {
+  ssr: false,
+  loading: () => null,
+});
 
 export default function HeroTyping({
   lines = [
@@ -31,7 +36,7 @@ export default function HeroTyping({
 
   useEffect(() => {
     if (!mountedRef.current) return;
-    let timeoutId;
+    let timeoutId: any;
     const currentLine = lines[lineIndex] ?? "";
 
     if (isTyping) {
@@ -76,23 +81,33 @@ export default function HeroTyping({
     loop,
   ]);
 
+  const showPrism = useMemo(() => {
+    if (typeof window === "undefined") return false;
+    const isLowEnd =
+      navigator.hardwareConcurrency && navigator.hardwareConcurrency <= 4;
+    const isMobile = /Mobi|Android/i.test(navigator.userAgent);
+    return !(isMobile && isLowEnd);
+  }, []);
+
   return (
     <section
       className="relative w-full min-h-[100vh] flex items-center justify-center py-16 px-6 overflow-hidden mt-[-85px]"
       dir="rtl"
     >
       <div className="absolute inset-0">
-        <Prism
-          animationType="rotate"
-          timeScale={0.2}
-          height={3.5}
-          baseWidth={5.5}
-          scale={3.6}
-          hueShift={0}
-          colorFrequency={1}
-          noise={0.1}
-          glow={1}
-        />
+        {showPrism && (
+          <Prism
+            animationType="rotate"
+            timeScale={0.2}
+            height={3.5}
+            baseWidth={5.5}
+            scale={3.6}
+            hueShift={0}
+            colorFrequency={1}
+            noise={0.1}
+            glow={1}
+          />
+        )}
       </div>
       <div className="max-w-4xl flex flex-col gap-5 w-full text-center text-white relative z-10">
         <div>

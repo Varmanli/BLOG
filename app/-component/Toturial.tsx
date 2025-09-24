@@ -1,25 +1,46 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
-import { Swiper, SwiperSlide } from "swiper/react";
-import { Navigation, Pagination, Autoplay } from "swiper/modules";
-import "swiper/css";
-import "swiper/css/navigation";
-import "swiper/css/pagination";
-import "swiper/css/autoplay";
+import dynamic from "next/dynamic";
 import Card from "./Card";
 import Loading from "../loading";
+
+// Load Swiper react components only on client
+const Swiper = dynamic(() => import("swiper/react").then((m) => m.Swiper), {
+  ssr: false,
+});
+const SwiperSlide = dynamic(
+  () => import("swiper/react").then((m) => m.SwiperSlide),
+  {
+    ssr: false,
+  }
+);
+
+const modulesPromise = () => import("swiper/modules");
 
 export default function Tutorial() {
   const [courses, setCourses] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [modules, setModules] = useState<any[]>([]);
+
+  useEffect(() => {
+    // Import CSS on client to avoid SSR bloat
+    Promise.all([
+      import("swiper/css"),
+      import("swiper/css/navigation"),
+      import("swiper/css/pagination"),
+      import("swiper/css/autoplay"),
+    ]).catch(() => {});
+    modulesPromise()
+      .then((m) => setModules([m.Pagination, m.Autoplay]))
+      .catch(() => {});
+  }, []);
 
   useEffect(() => {
     const fetchCourses = async () => {
       try {
-        const res = await fetch("/api/courses");
+        const res = await fetch("/api/courses", { next: { revalidate: 60 } });
         if (!res.ok) throw new Error("خطا در دریافت دوره‌ها");
         const data = await res.json();
         setCourses(data);
@@ -49,7 +70,7 @@ export default function Tutorial() {
       </h1>
 
       <Swiper
-        modules={[Pagination, Autoplay]}
+        modules={modules}
         navigation
         pagination={{ clickable: true }}
         autoplay={{ delay: 3000, disableOnInteraction: false }}

@@ -1,6 +1,6 @@
 "use client";
 
-import { motion } from "framer-motion";
+import React from "react";
 import Link from "next/link";
 import { IBlog } from "@/models/Blog";
 import Image from "next/image";
@@ -9,13 +9,9 @@ interface BlogCardProps {
   blog: IBlog;
 }
 
-export default function BlogCard({ blog }: BlogCardProps) {
+function BlogCardBase({ blog }: BlogCardProps) {
   return (
-    <motion.div
-      whileHover={{ scale: 1.05 }}
-      whileTap={{ scale: 0.98 }}
-      className="relative group rounded-2xl overflow-hidden shadow-lg bg-white dark:bg-gray-800 transition-all duration-500"
-    >
+    <div className="relative group rounded-2xl overflow-hidden shadow-lg bg-white dark:bg-gray-800 transition-all duration-500 hover:scale-[1.02]">
       {/* gradient overlay */}
       <div className="absolute inset-0 bg-gradient-to-r from-zinc-400/20 via-zinc-400/20 to-slate-400/20 opacity-0 group-hover:opacity-100 blur-2xl transition duration-500" />
 
@@ -26,6 +22,8 @@ export default function BlogCard({ blog }: BlogCardProps) {
           alt={blog.title}
           className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
           fill
+          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+          priority={false}
         />
 
         {/* شاین افکت */}
@@ -48,6 +46,9 @@ export default function BlogCard({ blog }: BlogCardProps) {
           </Link>
         </div>
       </div>
-    </motion.div>
+    </div>
   );
 }
+
+const BlogCard = React.memo(BlogCardBase);
+export default BlogCard;

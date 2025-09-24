@@ -1,13 +1,11 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { IBlog } from "@/models/Blog";
 import { ICategory } from "@/models/Category";
 import Card from "./Card";
 import Link from "next/link";
 import Status from "./Status";
-import { motion } from "framer-motion";
-import { FaFire, FaSortAmountDownAlt, FaSortAmountUp } from "react-icons/fa";
 
 interface BlogSectionProps {
   hideTabs?: boolean;
@@ -64,21 +62,34 @@ export default function BlogSection({
     return <Status type="loading" message="در حال دریافت بلاگ‌ها..." />;
   if (error) return <Status type="error" message="خطا در دریافت داده‌ها" />;
 
-  const filteredBlogs =
-    selectedCategory === "all"
-      ? blogs
-      : blogs.filter((blog) => String(blog.category) === selectedCategory);
+  const filteredBlogs = useMemo(
+    () =>
+      selectedCategory === "all"
+        ? blogs
+        : blogs.filter((blog) => String(blog.category) === selectedCategory),
+    [blogs, selectedCategory]
+  );
 
-  const sortedBlogs = [...filteredBlogs].sort((a, b) => {
+  const sortedBlogs = useMemo(() => {
+    const copy = [...filteredBlogs];
     if (sortOrder === "newest")
-      return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
+      return copy.sort(
+        (a, b) =>
+          new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+      );
     if (sortOrder === "oldest")
-      return new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime();
-    if (sortOrder === "popular") return b.views - a.views;
-    return 0;
-  });
+      return copy.sort(
+        (a, b) =>
+          new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()
+      );
+    if (sortOrder === "popular") return copy.sort((a, b) => b.views - a.views);
+    return copy;
+  }, [filteredBlogs, sortOrder]);
 
-  const displayBlogs = hideTabs ? sortedBlogs : sortedBlogs.slice(0, 9);
+  const displayBlogs = useMemo(
+    () => (hideTabs ? sortedBlogs : sortedBlogs.slice(0, 9)),
+    [hideTabs, sortedBlogs]
+  );
 
   return (
     <section id="blog" className={`relative z-20 md:px-14 `}>
@@ -127,7 +138,7 @@ export default function BlogSection({
             </button>
 
             {dropdownOpen && (
-              <div className="absolute mt-2 w-full rounded-lg bg-white dark:bg-gray-800 shadow-lg border border-gray-200 dark:border-gray-700 z-50 overflow-hidden animate-dropdown-fade">
+              <div className="absolute mt-2 w-full rounded-lg bg-white dark:bg-gray-800 shadow-lg border border-gray-200 dark:border-gray-700 z-50 overflow-hidden transition-all duration-200 animate-dropdown-fade">
                 <div
                   onClick={() => {
                     setSelectedCategory("all");
@@ -166,27 +177,21 @@ export default function BlogSection({
               <button className="w-full flex justify-between items-center gap-3 px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-200 font-medium shadow-sm hover:shadow-md transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-1">
                 {sortOrder === "newest" && (
                   <>
-                    جدیدترین <FaSortAmountDownAlt />
+                    جدیدترین <span className="inline-block">↓</span>
                   </>
                 )}
                 {sortOrder === "oldest" && (
                   <>
-                    قدیمی‌ترین <FaSortAmountUp />
+                    قدیمی‌ترین <span className="inline-block">↑</span>
                   </>
                 )}
                 {sortOrder === "popular" && (
                   <>
-                    محبوب‌ترین <FaFire />
+                    محبوب‌ترین <span className="inline-block">★</span>
                   </>
                 )}
               </button>
-              <motion.div
-                initial={{ opacity: 0, y: -10, scale: 0.95 }}
-                animate={{ opacity: 1, y: 0, scale: 1 }}
-                exit={{ opacity: 0, y: -10, scale: 0.95 }}
-                transition={{ duration: 0.2, ease: "easeOut" }}
-                className="absolute mt-2 w-40 rounded-xl bg-white dark:bg-gray-800 shadow-xl z-20 overflow-hidden border border-gray-200 dark:border-gray-700 opacity-0 scale-95 invisible group-hover:visible group-hover:opacity-100 group-hover:scale-100 transition-all duration-200"
-              >
+              <div className="absolute mt-2 w-40 rounded-xl bg-white dark:bg-gray-800 shadow-xl z-20 overflow-hidden border border-gray-200 dark:border-gray-700 opacity-0 scale-95 invisible group-hover:visible group-hover:opacity-100 group-hover:scale-100 transition-all duration-200">
                 {["newest", "oldest", "popular"].map((option) => (
                   <div
                     key={option}
@@ -202,7 +207,7 @@ export default function BlogSection({
                       : "محبوب‌ترین"}
                   </div>
                 ))}
-              </motion.div>
+              </div>
             </div>
           </div>
         </div>

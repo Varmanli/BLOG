@@ -209,7 +209,7 @@ export default function BlogSection({
       )}
 
       {/* نمایش لیست بلاگ‌ها */}
-      <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3 px-6">
+      <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3 md:px-6">
         {displayBlogs.length ? (
           displayBlogs.map((blog) => (
             <div key={String(blog._id)} className="p-5">

@@ -72,6 +72,7 @@ export default function Tutorial() {
                 title={course.title}
                 coverImage={course.coverImage}
                 itemType="course"
+                buttonText="مشاهده دوره"
               />
             </div>
           </SwiperSlide>

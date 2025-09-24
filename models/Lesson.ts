@@ -21,5 +21,8 @@ const LessonSchema = new Schema<ILesson>(
   { timestamps: true }
 );
 
+// Useful indexes
+LessonSchema.index({ course: 1, order: 1 });
+
 const Lesson = models.Lesson || model<ILesson>("Lesson", LessonSchema);
 export default Lesson;

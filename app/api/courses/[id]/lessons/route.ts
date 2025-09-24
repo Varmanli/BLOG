@@ -11,7 +11,12 @@ export async function GET(
   try {
     await connectDB();
 
-    const lessons = await Lesson.find({ course: params.id }).sort({ order: 1 });
+    const lessons = await Lesson.find(
+      { course: params.id },
+      { title: 1, order: 1 }
+    )
+      .sort({ order: 1 })
+      .lean();
 
     return NextResponse.json(lessons);
   } catch (error) {
@@ -40,7 +45,7 @@ export async function POST(
     }
 
     // چک کن که دوره وجود داره
-    const course = await Course.findById(params.id);
+    const course = await Course.findById(params.id).select({ _id: 1 }).lean();
     if (!course) {
       return NextResponse.json({ error: "دوره پیدا نشد" }, { status: 404 });
     }

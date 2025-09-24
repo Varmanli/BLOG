@@ -21,5 +21,8 @@ const CourseSchema = new Schema<ICourse>(
   { timestamps: true }
 );
 
+// Useful indexes
+CourseSchema.index({ createdAt: -1 });
+
 const Course = models.Course || model<ICourse>("Course", CourseSchema);
 export default Course;

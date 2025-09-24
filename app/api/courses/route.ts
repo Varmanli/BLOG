@@ -16,10 +16,34 @@ function generateSlug(title: string) {
 export async function GET() {
   try {
     await connectDB();
-    const courses = await Course.find().sort({ createdAt: -1 });
+    // Aggregate to include lessonsCount in one round trip (used in dashboard)
+    const courses = await Course.aggregate([
+      { $sort: { createdAt: -1 } },
+      {
+        $lookup: {
+          from: "lessons",
+          localField: "_id",
+          foreignField: "course",
+          as: "lessons",
+          pipeline: [{ $project: { _id: 1 } }],
+        },
+      },
+      {
+        $project: {
+          title: 1,
+          slug: 1,
+          category: 1,
+          description: 1,
+          coverImage: 1,
+          createdAt: 1,
+          updatedAt: 1,
+          lessonsCount: { $size: "$lessons" },
+        },
+      },
+    ]);
 
     return NextResponse.json(
-      courses.map((c) => ({
+      courses.map((c: any) => ({
         _id: c._id,
         title: c.title,
         slug: c.slug,
@@ -28,6 +52,7 @@ export async function GET() {
         coverImage: c.coverImage,
         createdAt: c.createdAt,
         updatedAt: c.updatedAt,
+        lessonsCount: c.lessonsCount ?? 0,
       }))
     );
   } catch (error) {

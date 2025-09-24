@@ -119,7 +119,10 @@ export async function GET(req: Request, { params }: Params) {
       return NextResponse.json({ error: "شناسه نامعتبر است" }, { status: 400 });
     }
 
-    const lesson = await Lesson.findOne({ _id: lessonId, course: id });
+    const lesson = await Lesson.findOne(
+      { _id: lessonId, course: id },
+      { title: 1, content: 1, order: 1 }
+    ).lean();
 
     if (!lesson) {
       return NextResponse.json({ error: "درس پیدا نشد" }, { status: 404 });

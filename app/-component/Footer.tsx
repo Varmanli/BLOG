@@ -3,17 +3,10 @@ import Link from "next/link";
 
 function Footer() {
   return (
-    <footer className="bg-background dark:bg-dark text-gray-300 py-10 px-6">
+    <footer className="bg-background z-70 dark:bg-dark text-gray-300 py-10 px-6">
       <div className="container mx-auto grid grid-cols-1 md:grid-cols-3 gap-8 items-center text-center md:text-right">
-        {/* پیام انگیزشی */}
-        <div>
-          <p className="text-sm md:text-base font-light text-gray-400">
-            به یادگیری و پیشرفت ادامه بده، آینده از آنِ تلاشگران است!
-          </p>
-        </div>
-
         {/* منو */}
-        <nav className="flex justify-center md:justify-center gap-6 text-sm font-medium">
+        <nav className="flex md:mr-40 justify-center md:justify-center gap-6 text-sm font-medium">
           <Link
             href="/"
             className="hover:text-accent transition-colors duration-200"
@@ -41,7 +34,7 @@ function Footer() {
         </nav>
 
         {/* شبکه‌های اجتماعی */}
-        <div className="flex justify-center md:justify-end gap-6">
+        <div className="flex justify-center  md:mr-[700px] gap-6">
           <a
             href="https://github.com/Varmanli"
             target="_blank"

@@ -39,7 +39,7 @@ export default function Header() {
   if (!themeContext) return null;
 
   return (
-    <header className="flex flex-row-reverse justify-between z-20 items-center px-5 py-5 md:px-[150px] relative">
+    <header className="flex flex-row-reverse justify-between z-20 items-center px-5 py-5 relative md:mx-10">
       <Link href="/" className="flex items-center">
         <Image src={logo} alt="logo" width={150} />
       </Link>

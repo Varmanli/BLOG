@@ -176,7 +176,7 @@ export default function ManageCoursesPage() {
       const res = await fetch("/api/courses");
       const data = await res.json();
       setCourses(
-        data.map((c: any) => ({ ...c, lessonsCount: c.lessons?.length || 0 }))
+        data.map((c: any) => ({ ...c, lessonsCount: c.lessonsCount ?? 0 }))
       );
     } catch {
       toast.error("خطا در دریافت دوره‌ها");
